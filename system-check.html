@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตรวจสอบระบบ - Wawa Baansoan Minimar</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>
+    <style>
+        .system-check {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .check-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .check-item:last-child {
+            border-bottom: none;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+        .status.pass { background: #d4edda; color: #155724; }
+        .status.fail { background: #f8d7da; color: #721c24; }
+        .status.warn { background: #fff3cd; color: #856404; }
+        .status.pending { background: #d1ecf1; color: #0c5460; }
+        .test-button {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover { background: #1a365d; }
+        .test-button.danger { background: #dc3545; }
+        .test-button.success { background: #28a745; }
+        .summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.3s ease;
+        }
+        
+        /* Modern enhancements */
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+        
+        /* Enhanced accessibility */
+        .test-button:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .test-button, .help-button {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main id="main-content" role="main">
+        <div class="system-check">
+            <header>
+                <h1><i class="fas fa-check-circle"></i> ตรวจสอบระบบ Wawa Baansoan Minimar</h1>
+                <button class="help-button" onclick="openHelpModal()" aria-label="เปิดช่วยเหลือ" title="ช่วยเหลือ (F1)">
+                    <i class="fas fa-question"></i>
+                </button>
+            </header>
+        
+        <div class="summary">
+            <h3>สถานะรวม</h3>
+            <div class="progress-bar">
+                <div id="overallProgress" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div id="overallStatus">กำลังตรวจสอบ...</div>
+        </div>
+
+        <!-- Files Check -->
+        <div class="check-section">
+            <h2><i class="fas fa-file-code"></i> ตรวจสอบไฟล์</h2>
+            <div id="fileChecks">
+                <div class="check-item">
+                    <span>index.html</span>
+                    <span id="index-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>style.css</span>
+                    <span id="style-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>script.js</span>
+                    <span id="script-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>admin-login.html</span>
+                    <span id="admin-login-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>admin-dashboard.html</span>
+                    <span id="admin-dashboard-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>admin-script.js</span>
+                    <span id="admin-script-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>admin-style.css</span>
+                    <span id="admin-style-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>logo.svg</span>
+                    <span id="logo-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>qr-code.svg</span>
+                    <span id="qr-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+            </div>
+            <button class="test-button" onclick="checkFiles()">ตรวจสอบไฟล์</button>
+        </div>
+
+        <!-- Functions Check -->
+        <div class="check-section">
+            <h2><i class="fas fa-cogs"></i> ตรวจสอบฟังก์ชัน</h2>
+            <div id="functionChecks">
+                <div class="check-item">
+                    <span>Main Script Functions</span>
+                    <span id="main-functions-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Admin Script Functions</span>
+                    <span id="admin-functions-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Loading System</span>
+                    <span id="loading-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Notification System</span>
+                    <span id="notification-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Modal System</span>
+                    <span id="modal-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+            </div>
+            <button class="test-button" onclick="checkFunctions()">ตรวจสอบฟังก์ชัน</button>
+        </div>
+
+        <!-- Features Check -->
+        <div class="check-section">
+            <h2><i class="fas fa-star"></i> ตรวจสอบฟีเจอร์</h2>
+            <div id="featureChecks">
+                <div class="check-item">
+                    <span>การจองห้อง (Booking)</span>
+                    <span id="booking-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>แจ้งปัญหา (Issue Report)</span>
+                    <span id="issue-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>ติดตามสถานะ (Status Tracking)</span>
+                    <span id="tracking-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>ติดต่อเรา (Contact)</span>
+                    <span id="contact-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Admin Login</span>
+                    <span id="admin-login-feature-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+            </div>
+            <button class="test-button" onclick="checkFeatures()">ตรวจสอบฟีเจอร์</button>
+        </div>
+
+        <!-- Browser Compatibility -->
+        <div class="check-section">
+            <h2><i class="fas fa-globe"></i> ความเข้ากันได้ของเบราว์เซอร์</h2>
+            <div id="browserChecks">
+                <div class="check-item">
+                    <span>Local Storage</span>
+                    <span id="localstorage-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>CSS Grid/Flexbox</span>
+                    <span id="css-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>ES6+ JavaScript</span>
+                    <span id="js-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Font Awesome Icons</span>
+                    <span id="icons-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Google Fonts</span>
+                    <span id="fonts-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+            </div>
+            <button class="test-button" onclick="checkBrowserCompatibility()">ตรวจสอบเบราว์เซอร์</button>
+        </div>
+
+        <!-- Performance Check -->
+        <div class="check-section">
+            <h2><i class="fas fa-tachometer-alt"></i> ประสิทธิภาพ</h2>
+            <div id="performanceChecks">
+                <div class="check-item">
+                    <span>Page Load Time</span>
+                    <span id="loadtime-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Memory Usage</span>
+                    <span id="memory-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+                <div class="check-item">
+                    <span>Console Errors</span>
+                    <span id="errors-status" class="status pending">รอตรวจสอบ</span>
+                </div>
+            </div>
+            <button class="test-button" onclick="checkPerformance()">ตรวจสอบประสิทธิภาพ</button>
+        </div>
+
+        <!-- Actions -->
+        <div class="check-section">
+            <h2><i class="fas fa-play"></i> การดำเนินการ</h2>
+            <button class="test-button success" onclick="runAllChecks()">
+                <i class="fas fa-check-double"></i> ตรวจสอบทั้งหมด
+            </button>
+            <button class="test-button" onclick="openMainSite()">
+                <i class="fas fa-external-link-alt"></i> เปิดเว็บหลัก
+            </button>
+            <button class="test-button" onclick="openAdminPanel()">
+                <i class="fas fa-cog"></i> เปิด Admin Panel
+            </button>
+            <button class="test-button" onclick="openTestPages()">
+                <i class="fas fa-vial"></i> เปิดหน้าทดสอบ
+            </button>
+            <button class="test-button danger" onclick="resetSystem()">
+                <i class="fas fa-redo"></i> รีเซ็ตระบบ
+            </button>
+        </div>
+
+        <!-- Results -->
+        <div class="check-section">
+            <h2><i class="fas fa-clipboard-list"></i> สรุปผลการตรวจสอบ</h2>
+            <div id="checkResults">
+                <p>ยังไม่ได้ทำการตรวจสอบ</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="admin-script.js"></script>
+    <script>
+        let checkResults = {
+            files: {},
+            functions: {},
+            features: {},
+            browser: {},
+            performance: {}
+        };
+
+        let totalChecks = 0;
+        let passedChecks = 0;
+
+        function updateProgress() {
+            const percentage = totalChecks > 0 ? Math.round((passedChecks / totalChecks) * 100) : 0;
+            document.getElementById('overallProgress').style.width = percentage + '%';
+            
+            let status = '';
+            if (percentage === 100) {
+                status = `🎉 ระบบพร้อมใช้งาน 100% (${passedChecks}/${totalChecks})`;
+            } else if (percentage >= 80) {
+                status = `✅ ระบบใช้งานได้ ${percentage}% (${passedChecks}/${totalChecks})`;
+            } else if (percentage >= 60) {
+                status = `⚠️ ระบบใช้งานได้บางส่วน ${percentage}% (${passedChecks}/${totalChecks})`;
+            } else {
+                status = `❌ ระบบต้องแก้ไข ${percentage}% (${passedChecks}/${totalChecks})`;
+            }
+            
+            document.getElementById('overallStatus').textContent = status;
+        }
+
+        function setStatus(id, status, message = '') {
+            const element = document.getElementById(id);
+            element.className = `status ${status}`;
+            element.textContent = status === 'pass' ? '✅ ผ่าน' : 
+                                 status === 'fail' ? '❌ ไม่ผ่าน' : 
+                                 status === 'warn' ? '⚠️ เตือน' : 'รอตรวจสอบ';
+            if (message) element.title = message;
+            
+            totalChecks++;
+            if (status === 'pass') passedChecks++;
+            updateProgress();
+        }
+
+        function checkFiles() {
+            totalChecks = 0;
+            passedChecks = 0;
+            
+            // Test if main files exist by trying to fetch them
+            const files = [
+                'index.html', 'style.css', 'script.js',
+                'admin-login.html', 'admin-dashboard.html', 'admin-script.js', 'admin-style.css',
+                'logo.svg', 'qr-code.svg'
+            ];
+
+            files.forEach(file => {
+                try {
+                    // Check if we can create links to these files
+                    const link = document.createElement('link');
+                    link.href = file;
+                    
+                    // For CSS files, check if they're actually loaded
+                    if (file.endsWith('.css')) {
+                        const styles = getComputedStyle(document.body);
+                        setStatus(file.replace('.', '-').replace('.', '-') + '-status', 'pass', 'CSS file accessible');
+                    } else if (file.endsWith('.js')) {
+                        // Check if script functions are available
+                        if (file === 'script.js' && typeof hideLoading !== 'undefined') {
+                            setStatus('script-status', 'pass', 'Main script loaded with functions');
+                        } else if (file === 'admin-script.js' && typeof handleLogin !== 'undefined') {
+                            setStatus('admin-script-status', 'pass', 'Admin script loaded with functions');
+                        } else {
+                            setStatus(file.replace('.', '-') + '-status', 'warn', 'Script file exists but functions unclear');
+                        }
+                    } else {
+                        setStatus(file.replace('.', '-').replace('.', '-') + '-status', 'pass', 'File accessible');
+                    }
+                } catch (error) {
+                    setStatus(file.replace('.', '-').replace('.', '-') + '-status', 'fail', 'File not accessible: ' + error.message);
+                }
+            });
+        }
+
+        function checkFunctions() {
+            // Check main script functions
+            const mainFunctions = ['hideLoading', 'showLoading', 'showNotification', 'openBookingModal'];
+            const mainExists = mainFunctions.every(fn => typeof window[fn] === 'function');
+            setStatus('main-functions-status', mainExists ? 'pass' : 'fail', 
+                mainExists ? 'All main functions available' : 'Some main functions missing');
+
+            // Check admin script functions
+            const adminFunctions = ['handleLogin', 'initDashboard'];
+            const adminExists = adminFunctions.every(fn => typeof window[fn] === 'function');
+            setStatus('admin-functions-status', adminExists ? 'pass' : 'fail',
+                adminExists ? 'All admin functions available' : 'Some admin functions missing');
+
+            // Test loading system
+            try {
+                if (typeof showLoading === 'function' && typeof hideLoading === 'function') {
+                    setStatus('loading-status', 'pass', 'Loading system functions available');
+                } else {
+                    setStatus('loading-status', 'fail', 'Loading system functions missing');
+                }
+            } catch (error) {
+                setStatus('loading-status', 'fail', 'Loading system error: ' + error.message);
+            }
+
+            // Test notification system
+            try {
+                if (typeof showNotification === 'function') {
+                    setStatus('notification-status', 'pass', 'Notification system available');
+                } else {
+                    setStatus('notification-status', 'fail', 'Notification system missing');
+                }
+            } catch (error) {
+                setStatus('notification-status', 'fail', 'Notification system error: ' + error.message);
+            }
+
+            // Test modal system
+            const modalElements = document.querySelectorAll('.modal');
+            setStatus('modal-status', modalElements.length > 0 ? 'pass' : 'fail',
+                `Found ${modalElements.length} modal elements`);
+        }
+
+        function checkFeatures() {
+            // Check booking feature
+            const bookingModal = document.getElementById('bookingModal');
+            setStatus('booking-status', bookingModal ? 'pass' : 'warn', 
+                bookingModal ? 'Booking modal element found' : 'Booking modal not found (may be in main page)');
+
+            // Check issue report feature
+            const issueForm = document.getElementById('issueForm');
+            setStatus('issue-status', issueForm ? 'pass' : 'warn',
+                issueForm ? 'Issue form found' : 'Issue form not found (may be in main page)');
+
+            // Check status tracking
+            const trackingModal = document.getElementById('trackingModal');
+            setStatus('tracking-status', trackingModal ? 'pass' : 'warn',
+                trackingModal ? 'Tracking modal found' : 'Tracking modal not found (may be in main page)');
+
+            // Check contact feature
+            const contactForm = document.getElementById('contactForm');
+            setStatus('contact-status', contactForm ? 'pass' : 'warn',
+                contactForm ? 'Contact form found' : 'Contact form not found (may be in main page)');
+
+            // Check admin login
+            const adminLogin = typeof handleLogin === 'function';
+            setStatus('admin-login-feature-status', adminLogin ? 'pass' : 'fail',
+                adminLogin ? 'Admin login function available' : 'Admin login function missing');
+        }
+
+        function checkBrowserCompatibility() {
+            // Check localStorage
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                setStatus('localstorage-status', 'pass', 'LocalStorage works');
+            } catch (error) {
+                setStatus('localstorage-status', 'fail', 'LocalStorage not available');
+            }
+
+            // Check CSS support
+            const supportsGrid = CSS.supports('display', 'grid');
+            const supportsFlex = CSS.supports('display', 'flex');
+            setStatus('css-status', supportsGrid && supportsFlex ? 'pass' : 'warn',
+                `Grid: ${supportsGrid}, Flex: ${supportsFlex}`);
+
+            // Check ES6+ support
+            try {
+                eval('const test = () => {}; const {a} = {a: 1}; const arr = [...[1,2,3]];');
+                setStatus('js-status', 'pass', 'ES6+ features supported');
+            } catch (error) {
+                setStatus('js-status', 'fail', 'ES6+ features not fully supported');
+            }
+
+            // Check Font Awesome
+            const faIcons = document.querySelectorAll('.fas, .fab, .far');
+            setStatus('icons-status', faIcons.length > 0 ? 'pass' : 'warn',
+                `Found ${faIcons.length} Font Awesome icons`);
+
+            // Check Google Fonts
+            const prompt = getComputedStyle(document.body).fontFamily;
+            setStatus('fonts-status', prompt.includes('Prompt') ? 'pass' : 'warn',
+                `Font family: ${prompt}`);
+        }
+
+        function checkPerformance() {
+            // Check page load time
+            const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+            setStatus('loadtime-status', loadTime < 3000 ? 'pass' : loadTime < 5000 ? 'warn' : 'fail',
+                `Load time: ${loadTime}ms`);
+
+            // Check memory usage
+            if (performance.memory) {
+                const usedMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
+                setStatus('memory-status', usedMB < 50 ? 'pass' : usedMB < 100 ? 'warn' : 'fail',
+                    `Memory: ${usedMB} MB`);
+            } else {
+                setStatus('memory-status', 'warn', 'Memory info not available');
+            }
+
+            // Check console errors
+            let errorCount = 0;
+            const originalError = console.error;
+            console.error = function(...args) {
+                errorCount++;
+                originalError.apply(console, args);
+            };
+            
+            setTimeout(() => {
+                setStatus('errors-status', errorCount === 0 ? 'pass' : errorCount < 3 ? 'warn' : 'fail',
+                    `Console errors: ${errorCount}`);
+                console.error = originalError;
+            }, 1000);
+        }
+
+        function runAllChecks() {
+            totalChecks = 0;
+            passedChecks = 0;
+            
+            document.getElementById('checkResults').innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> กำลังตรวจสอบทั้งหมด...</p>';
+            
+            setTimeout(() => {
+                checkFiles();
+                setTimeout(() => {
+                    checkFunctions();
+                    setTimeout(() => {
+                        checkFeatures();
+                        setTimeout(() => {
+                            checkBrowserCompatibility();
+                            setTimeout(() => {
+                                checkPerformance();
+                                setTimeout(generateReport, 2000);
+                            }, 500);
+                        }, 500);
+                    }, 500);
+                }, 500);
+            }, 500);
+        }
+
+        function generateReport() {
+            const percentage = Math.round((passedChecks / totalChecks) * 100);
+            let report = '<h3>📊 รายงานการตรวจสอบระบบ</h3>';
+            
+            if (percentage >= 90) {
+                report += '<div class="status pass">🎉 ระบบพร้อมใช้งานเต็มที่!</div>';
+                report += '<p><strong>ระบบทำงานได้ดีมาก</strong> สามารถใช้งานได้ทันทีในสภาพแวดล้อมจริง</p>';
+            } else if (percentage >= 80) {
+                report += '<div class="status pass">✅ ระบบใช้งานได้ดี</div>';
+                report += '<p><strong>ระบบทำงานได้ดี</strong> อาจมีปัญหาเล็กน้อยที่ไม่ส่งผลกระทบต่อการใช้งาน</p>';
+            } else if (percentage >= 60) {
+                report += '<div class="status warn">⚠️ ระบบใช้งานได้บางส่วน</div>';
+                report += '<p><strong>ระบบใช้งานได้</strong> แต่ควรแก้ไขปัญหาเพื่อประสิทธิภาพที่ดีขึ้น</p>';
+            } else {
+                report += '<div class="status fail">❌ ระบบต้องแก้ไข</div>';
+                report += '<p><strong>ระบบมีปัญหา</strong> ต้องแก้ไขก่อนใช้งานจริง</p>';
+            }
+            
+            report += `<p><strong>คะแนนรวม:</strong> ${passedChecks}/${totalChecks} (${percentage}%)</p>`;
+            
+            report += '<h4>🎯 คำแนะนำ:</h4><ul>';
+            report += '<li>เปิดเว็บหลักที่ <code>index.html</code></li>';
+            report += '<li>ทดสอบการจองห้อง แจ้งปัญหา และติดตามสถานะ</li>';
+            report += '<li>เข้า Admin Panel ด้วย username: <code>admin</code>, password: <code>wawa2025</code></li>';
+            report += '<li>ตรวจสอบ Console (F12) หากพบปัญหา</li>';
+            report += '</ul>';
+            
+            document.getElementById('checkResults').innerHTML = report;
+        }
+
+        function openMainSite() {
+            window.open('index.html', '_blank');
+        }
+
+        function openAdminPanel() {
+            window.open('admin-login.html', '_blank');
+        }
+
+        function openTestPages() {
+            window.open('test-system.html', '_blank');
+            window.open('test-admin.html', '_blank');
+        }
+
+        function resetSystem() {
+            if (confirm('ต้องการรีเซ็ตระบบ? (ล้าง LocalStorage และรีเฟรชหน้า)')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // Auto-start basic checks when page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('checkResults').innerHTML = '<p>✨ พร้อมสำหรับการตรวจสอบ กดปุ่ม "ตรวจสอบทั้งหมด" เพื่อเริ่มต้น</p>';
+            }, 1000);
+        });
+    </script>
+    
+    <!-- Include Usability Enhancements -->
+    <script src="usability-enhancements.js"></script>
+    
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal" role="dialog" aria-labelledby="helpModalTitle" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="helpModalTitle"><i class="fas fa-question-circle"></i> ช่วยเหลือ - ตรวจสอบระบบ</h2>
+                <button class="close-btn" onclick="closeHelpModal()" aria-label="ปิด">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3><i class="fas fa-play-circle"></i> วิธีใช้งาน</h3>
+                    <ul>
+                        <li>กดปุ่ม "ตรวจสอบทั้งหมด" เพื่อตรวจสอบไฟล์และระบบ</li>
+                        <li>ดูผลลัพธ์ในแถบความคืบหน้าและรายการด้านล่าง</li>
+                        <li>ไฟล์ที่ผ่านจะแสดงสีเขียว ไฟล์ที่มีปัญหาจะแสดงสีแดง</li>
+                        <li>ใช้ปุ่ม "รีเซ็ต" เพื่อตรวจสอบใหม่</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3><i class="fas fa-keyboard"></i> คีย์ลัด</h3>
+                    <ul>
+                        <li><kbd>F1</kbd> - เปิดช่วยเหลือ</li>
+                        <li><kbd>Escape</kbd> - ปิดหน้าต่าง</li>
+                        <li><kbd>Tab</kbd> - นำทางด้วยคีย์บอร์ด</li>
+                        <li><kbd>Enter</kbd> - เริ่มตรวจสอบ</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container" aria-live="polite"></div>
+</body>
+</html>

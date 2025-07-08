@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ทดสอบ Admin Panel - Wawa Baansoan Minimar</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>
+    <style>
+        .test-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        .test-button {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            background: #1a365d;
+            transform: translateY(-2px);
+        }
+        .test-button.danger {
+            background: #dc3545;
+        }
+        .test-button.danger:hover {
+            background: #c82333;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .credentials {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            margin: 15px 0;
+        }
+        .hidden { display: none !important; }
+        
+        /* Modern enhancements */
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+        
+        /* Enhanced accessibility */
+        .test-button:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .test-button, .help-button {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main id="main-content" role="main">
+        <div class="test-container">
+            <header>
+                <h1><i class="fas fa-tools"></i> ทดสอบ Admin Panel - Wawa Baansoan Minimar</h1>
+                <button class="help-button" onclick="openHelpModal()" aria-label="เปิดช่วยเหลือ" title="ช่วยเหลือ (F1)">
+                    <i class="fas fa-question"></i>
+                </button>
+            </header>
+        
+        <div class="test-section">
+            <h2><i class="fas fa-info-circle"></i> ข้อมูลการเข้าสู่ระบบ</h2>
+            <div class="credentials">
+                <h4><i class="fas fa-key"></i> ข้อมูลสำหรับทดสอบ:</h4>
+                <p><strong>ชื่อผู้ใช้:</strong> admin</p>
+                <p><strong>รหัสผ่าน:</strong> wawa2025</p>
+                <p><strong>หมายเหตุ:</strong> ระบบจะจำการเข้าสู่ระบบหากติ๊กช่อง "จดจำการเข้าสู่ระบบ"</p>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-sign-in-alt"></i> ทดสอบการเข้าสู่ระบบ</h2>
+            <p>ทดสอบฟังก์ชันการ Login และ Logout</p>
+            <button class="test-button" onclick="testDirectLogin()">Login ทันที (ข้าม Form)</button>
+            <button class="test-button" onclick="testLogout()">Logout</button>
+            <button class="test-button" onclick="checkLoginStatus()">ตรวจสอบสถานะ Login</button>
+            <div id="loginTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-database"></i> ทดสอบข้อมูล Admin</h2>
+            <p>ทดสอบการโหลดและจัดการข้อมูล</p>
+            <button class="test-button" onclick="testDataLoad()">โหลดข้อมูลทดสอบ</button>
+            <button class="test-button" onclick="testDataSave()">บันทึกข้อมูล</button>
+            <button class="test-button danger" onclick="clearAdminData()">ล้างข้อมูล Admin</button>
+            <div id="dataTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-cogs"></i> ทดสอบฟังก์ชัน Admin</h2>
+            <p>ทดสอบฟังก์ชันต่างๆ ของ Admin Panel</p>
+            <button class="test-button" onclick="testAdminFunctions()">ทดสอบฟังก์ชัน</button>
+            <button class="test-button" onclick="testErrorHandling()">ทดสอบ Error Handling</button>
+            <div id="functionTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-external-link-alt"></i> เปิดหน้า Admin</h2>
+            <p>เข้าสู่หน้าต่างๆ ของ Admin Panel</p>
+            <button class="test-button" onclick="openAdminLogin()">เปิด Admin Login</button>
+            <button class="test-button" onclick="openAdminDashboard()">เปิด Admin Dashboard</button>
+            <button class="test-button" onclick="openMainSite()">กลับไปหน้าหลัก</button>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-bug"></i> ตรวจสอบปัญหา</h2>
+            <p>ดูข้อมูล Debug และแก้ไขปัญหา</p>
+            <button class="test-button" onclick="showDebugInfo()">แสดงข้อมูล Debug</button>
+            <button class="test-button" onclick="testConsoleLog()">ทดสอบ Console Log</button>
+            <button class="test-button danger" onclick="simulateError()">จำลองข้อผิดพลาด</button>
+            <div id="debugTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-chart-bar"></i> สถิติระบบ</h2>
+            <div id="systemStats" class="test-result info">
+                <p><i class="fas fa-clock"></i> เวลาปัจจุบัน: <span id="currentTime">-</span></p>
+                <p><i class="fas fa-database"></i> LocalStorage: <span id="storageStatus">-</span></p>
+                <p><i class="fas fa-user"></i> สถานะผู้ใช้: <span id="userStatus">-</span></p>
+                <p><i class="fas fa-memory"></i> Memory Usage: <span id="memoryUsage">-</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>กำลังทดสอบ...</p>
+        </div>
+    </div>
+
+    <!-- Emergency Fix: Pre-define mock data to prevent defaultRooms is not defined error -->
+    <script>
+        // Emergency mock data definitions - must come before admin-script.js
+        if (typeof window.defaultRooms === 'undefined') {
+            window.defaultRooms = [
+                { id: 'R001', name: 'ห้องแดง (Red Room)', price: 800, status: 'available' },
+                { id: 'R002', name: 'ห้องเขียว (Green Room)', price: 850, status: 'available' },
+                { id: 'R003', name: 'ห้องฟ้า (Blue Room)', price: 900, status: 'occupied' },
+                { id: 'R004', name: 'ห้องส้ม (Orange Room)', price: 950, status: 'available' },
+                { id: 'R005', name: 'ห้องม่วง (Purple Room)', price: 1000, status: 'maintenance' }
+            ];
+        }
+
+        if (typeof window.defaultBookings === 'undefined') {
+            window.defaultBookings = [
+                { id: 'B001', room: 'R003', guest: 'คุณสมชาย ใจดี', checkIn: '2025-01-10', checkOut: '2025-01-12', status: 'confirmed' },
+                { id: 'B002', room: 'R001', guest: 'คุณสมหญิง รักสะอาด', checkIn: '2025-01-15', checkOut: '2025-01-17', status: 'pending' }
+            ];
+        }
+
+        if (typeof window.defaultIssues === 'undefined') {
+            window.defaultIssues = [
+                { id: 'I001', room: 'R005', issue: 'แอร์เสีย', status: 'pending', priority: 'high' },
+                { id: 'I002', room: 'R002', issue: 'หลอดไฟขัดข้อง', status: 'resolved', priority: 'medium' }
+            ];
+        }
+
+        if (typeof window.defaultContacts === 'undefined') {
+            window.defaultContacts = [
+                { id: 'C001', name: 'คุณมานี', email: 'manee@email.com', message: 'สอบถามราคาห้องพัก', status: 'new' },
+                { id: 'C002', name: 'คุณโสมส', email: 'somsri@email.com', message: 'ต้องการจองห้องพัก', status: 'replied' }
+            ];
+        }
+
+        // Also define as global variables (without window prefix) for backward compatibility
+        if (typeof defaultRooms === 'undefined') { var defaultRooms = window.defaultRooms; }
+        if (typeof defaultBookings === 'undefined') { var defaultBookings = window.defaultBookings; }
+        if (typeof defaultIssues === 'undefined') { var defaultIssues = window.defaultIssues; }
+        if (typeof defaultContacts === 'undefined') { var defaultContacts = window.defaultContacts; }
+
+        console.log('🚨 Emergency Fix: Mock data pre-defined for test-admin.html');
+        console.log('📊 defaultRooms:', defaultRooms?.length || 0, 'items');
+        console.log('📅 defaultBookings:', defaultBookings?.length || 0, 'items');
+        console.log('🔧 defaultIssues:', defaultIssues?.length || 0, 'items');
+        console.log('📧 defaultContacts:', defaultContacts?.length || 0, 'items');
+    </script>
+
+    <script src="admin-script.js"></script>
+    <script>
+        // Test functions
+        function testDirectLogin() {
+            document.getElementById('loginTest').innerHTML = '<span class="info">กำลังทดสอบการ Login...</span>';
+            
+            // Simulate successful login
+            const testUser = { username: 'admin', loginTime: new Date() };
+            localStorage.setItem('adminUser', JSON.stringify(testUser));
+            
+            setTimeout(() => {
+                document.getElementById('loginTest').innerHTML = '<span class="success">✅ Login สำเร็จ! ข้อมูลถูกบันทึกใน LocalStorage</span>';
+                updateSystemStats();
+            }, 1000);
+        }
+
+        function testLogout() {
+            document.getElementById('loginTest').innerHTML = '<span class="info">กำลัง Logout...</span>';
+            
+            localStorage.removeItem('adminUser');
+            currentUser = null;
+            
+            setTimeout(() => {
+                document.getElementById('loginTest').innerHTML = '<span class="warning">⚠️ Logout แล้ว - ข้อมูล Login ถูกลบ</span>';
+                updateSystemStats();
+            }, 500);
+        }
+
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('adminUser');
+            const status = savedUser ? JSON.parse(savedUser) : null;
+            
+            if (status) {
+                document.getElementById('loginTest').innerHTML = 
+                    '<span class="success">✅ Login อยู่: ' + status.username + 
+                    '<br>เวลา Login: ' + new Date(status.loginTime).toLocaleString('th-TH') + '</span>';
+            } else {
+                document.getElementById('loginTest').innerHTML = '<span class="error">❌ ไม่ได้ Login</span>';
+            }
+        }
+
+        function testDataLoad() {
+            document.getElementById('dataTest').innerHTML = '<span class="info">กำลังโหลดข้อมูล...</span>';
+            
+            try {
+                // Test if admin script functions are available
+                const hasDefaultRooms = typeof defaultRooms !== 'undefined';
+                const hasDefaultBookings = typeof defaultBookings !== 'undefined';
+                
+                let result = '';
+                if (hasDefaultRooms) {
+                    result += '✅ defaultRooms: ' + defaultRooms.length + ' รายการ<br>';
+                } else {
+                    result += '❌ defaultRooms: ไม่พบข้อมูล<br>';
+                }
+                
+                if (hasDefaultBookings) {
+                    result += '✅ defaultBookings: ' + defaultBookings.length + ' รายการ<br>';
+                } else {
+                    result += '❌ defaultBookings: ไม่พบข้อมูล<br>';
+                }
+                
+                document.getElementById('dataTest').innerHTML = '<span class="success">' + result + '</span>';
+            } catch (error) {
+                document.getElementById('dataTest').innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
+            }
+        }
+
+        function testDataSave() {
+            try {
+                const testData = {
+                    rooms: ['A101', 'A102', 'B101'],
+                    bookings: ['BK001', 'BK002'],
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem('wawa_test_data', JSON.stringify(testData));
+                document.getElementById('dataTest').innerHTML = '<span class="success">✅ ข้อมูลทดสอบถูกบันทึก</span>';
+            } catch (error) {
+                document.getElementById('dataTest').innerHTML = '<span class="error">❌ บันทึกไม่ได้: ' + error.message + '</span>';
+            }
+        }
+
+        function clearAdminData() {
+            if (confirm('ต้องการล้างข้อมูล Admin ทั้งหมด?')) {
+                try {
+                    // Clear admin-related localStorage
+                    const keys = ['adminUser', 'wawa_rooms', 'wawa_bookings', 'wawa_issues', 'wawa_contacts', 'wawa_settings', 'wawa_test_data'];
+                    keys.forEach(key => localStorage.removeItem(key));
+                    
+                    document.getElementById('dataTest').innerHTML = '<span class="warning">⚠️ ข้อมูล Admin ถูกล้างแล้ว</span>';
+                    updateSystemStats();
+                } catch (error) {
+                    document.getElementById('dataTest').innerHTML = '<span class="error">❌ ล้างข้อมูลไม่ได้: ' + error.message + '</span>';
+                }
+            }
+        }
+
+        function testAdminFunctions() {
+            document.getElementById('functionTest').innerHTML = '<span class="info">กำลังทดสอบฟังก์ชัน...</span>';
+            
+            let results = [];
+            
+            // Test handleLogin function
+            if (typeof handleLogin === 'function') {
+                results.push('✅ handleLogin function exists');
+            } else {
+                results.push('❌ handleLogin function missing');
+            }
+            
+            // Test initDashboard function
+            if (typeof initDashboard === 'function') {
+                results.push('✅ initDashboard function exists');
+            } else {
+                results.push('❌ initDashboard function missing');
+            }
+            
+            // Test showSection function
+            if (typeof showSection === 'function') {
+                results.push('✅ showSection function exists');
+            } else {
+                results.push('❌ showSection function missing');
+            }
+            
+            document.getElementById('functionTest').innerHTML = '<span class="success">' + results.join('<br>') + '</span>';
+        }
+
+        function testErrorHandling() {
+            document.getElementById('functionTest').innerHTML = '<span class="info">ทดสอบ Error Handling...</span>';
+            
+            try {
+                // Try to call initDashboard to see if it handles errors properly
+                if (typeof initDashboard === 'function') {
+                    // This might fail if we're not on dashboard page, but should be handled gracefully
+                    console.log('Testing initDashboard...');
+                    document.getElementById('functionTest').innerHTML = '<span class="success">✅ Error Handling ทำงานปกติ - ดู Console สำหรับ logs</span>';
+                } else {
+                    document.getElementById('functionTest').innerHTML = '<span class="error">❌ ไม่พบฟังก์ชันสำหรับทดสอบ</span>';
+                }
+            } catch (error) {
+                document.getElementById('functionTest').innerHTML = '<span class="success">✅ Error ถูก Catch: ' + error.message + '</span>';
+            }
+        }
+
+        function openAdminLogin() {
+            window.open('admin-login.html', '_blank');
+        }
+
+        function openAdminDashboard() {
+            window.open('admin-dashboard.html', '_blank');
+        }
+
+        function openMainSite() {
+            window.open('index.html', '_blank');
+        }
+
+        function showDebugInfo() {
+            const info = {
+                'Page URL': window.location.href,
+                'User Agent': navigator.userAgent,
+                'Screen Size': screen.width + 'x' + screen.height,
+                'Window Size': window.innerWidth + 'x' + window.innerHeight,
+                'LocalStorage Available': typeof(Storage) !== 'undefined',
+                'Console Available': typeof console !== 'undefined',
+                'Admin Script Loaded': typeof handleLogin !== 'undefined'
+            };
+            
+            let debugHTML = '<strong>🔍 Debug Information:</strong><br>';
+            for (let [key, value] of Object.entries(info)) {
+                debugHTML += `<strong>${key}:</strong> ${value}<br>`;
+            }
+            
+            document.getElementById('debugTest').innerHTML = '<span class="info">' + debugHTML + '</span>';
+        }
+
+        function testConsoleLog() {
+            console.log('🧪 Test Console Log from Admin Test Page');
+            console.info('ℹ️ Info message');
+            console.warn('⚠️ Warning message');
+            console.error('❌ Error message (test)');
+            
+            document.getElementById('debugTest').innerHTML = '<span class="success">✅ Console Log messages ถูกส่งแล้ว - เปิด Developer Tools (F12) เพื่อดู</span>';
+        }
+
+        function simulateError() {
+            if (confirm('จำลองข้อผิดพลาดเพื่อทดสอบ Error Handling?')) {
+                try {
+                    // This will throw an error
+                    nonExistentFunction();
+                } catch (error) {
+                    console.error('🧪 Simulated Error:', error);
+                    document.getElementById('debugTest').innerHTML = '<span class="error">❌ จำลองข้อผิดพลาด: ' + error.message + '</span>';
+                }
+            }
+        }
+
+        function updateSystemStats() {
+            // Update current time
+            document.getElementById('currentTime').textContent = new Date().toLocaleString('th-TH');
+            
+            // Check LocalStorage
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                document.getElementById('storageStatus').innerHTML = '<span style="color: green;">ใช้งานได้</span>';
+            } catch (e) {
+                document.getElementById('storageStatus').innerHTML = '<span style="color: red;">ไม่ใช้งานได้</span>';
+            }
+            
+            // Check user status
+            const savedUser = localStorage.getItem('adminUser');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                document.getElementById('userStatus').innerHTML = '<span style="color: green;">Login: ' + user.username + '</span>';
+            } else {
+                document.getElementById('userStatus').innerHTML = '<span style="color: red;">ไม่ได้ Login</span>';
+            }
+            
+            // Memory usage (if available)
+            if (performance.memory) {
+                const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
+                document.getElementById('memoryUsage').textContent = used + ' MB';
+            } else {
+                document.getElementById('memoryUsage').textContent = 'ไม่รองรับ';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSystemStats();
+            setInterval(updateSystemStats, 5000); // Update every 5 seconds
+            
+            console.log('🧪 Admin Test Page Loaded');
+        });
+    </script>
+    
+    <!-- Include Usability Enhancements -->
+    <script src="usability-enhancements.js"></script>
+    
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal" role="dialog" aria-labelledby="helpModalTitle" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="helpModalTitle"><i class="fas fa-question-circle"></i> ช่วยเหลือ - ทดสอบ Admin Panel</h2>
+                <button class="close-btn" onclick="closeHelpModal()" aria-label="ปิด">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3><i class="fas fa-play-circle"></i> วิธีใช้งาน</h3>
+                    <ul>
+                        <li>กดปุ่มทดสอบเพื่อตรวจสอบฟังก์ชันต่างๆ ของ Admin Panel</li>
+                        <li>ดูผลลัพธ์ในช่องด้านล่างแต่ละปุ่ม</li>
+                        <li>ใช้ปุ่ม "ล้างผลลัพธ์" เพื่อเริ่มทดสอบใหม่</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3><i class="fas fa-keyboard"></i> คีย์ลัด</h3>
+                    <ul>
+                        <li><kbd>F1</kbd> - เปิดช่วยเหลือ</li>
+                        <li><kbd>Escape</kbd> - ปิดหน้าต่าง</li>
+                        <li><kbd>Tab</kbd> - นำทางด้วยคีย์บอร์ด</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Wawa Baansoan Minimar</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="description" content="ระบบจัดการหลังบ้าน - Wawa Baansoan Minimar">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="./manifest.json">
+    
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>    </head>
+<body>
+    <main id="main-content" role="main">
+        <div class="login-container">
+        <!-- Modern Floating Background Elements -->
+        <div class="floating-elements">
+            <div class="float-element float-1"></div>
+            <div class="float-element float-2"></div>
+            <div class="float-element float-3"></div>
+        </div>
+        
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo-section">
+                    <div class="logo-wrapper">
+                        <img src="./logo.svg" alt="Wawa Baansoan Minimar Logo" class="login-logo">
+                        <div class="logo-glow"></div>
+                    </div>
+                    <h1>Wawa Baansoan Minimar</h1>
+                    <p>ระบบจัดการหลังบ้าน<span class="version-tag">v2.0</span></p>
+                </div>
+            </div>
+            
+            <div class="login-body">
+                <form id="adminLoginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">ชื่อผู้ใช้งาน</label>
+                        <div class="input-wrapper modern-input">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="username" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
+                            <div class="input-focus-line"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">รหัสผ่าน</label>
+                        <div class="input-wrapper modern-input">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="current-password">
+                            <button type="button" class="toggle-password" onclick="togglePassword()" title="แสดง/ซ่อนรหัสผ่าน" aria-label="แสดง/ซ่อนรหัสผ่าน">
+                                <i class="fas fa-eye" id="passwordEye"></i>
+                            </button>
+                            <div class="input-focus-line"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-wrapper modern-checkbox">
+                            <input type="checkbox" id="rememberMe" name="rememberMe">
+                            <span class="checkmark">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span class="checkbox-text">จดจำการเข้าสู่ระบบ</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="login-btn modern-btn">
+                        <span class="btn-content">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>เข้าสู่ระบบ</span>
+                        </span>
+                        <div class="btn-loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </button>
+                    
+                    <!-- Two-Factor Authentication (Future Feature) -->
+                    <div class="two-factor-section hidden" id="twoFactorSection">
+                        <div class="form-group">
+                            <label for="twoFactorCode">รหัสยืนยันตัวตน (2FA)</label>
+                            <div class="input-wrapper modern-input">
+                                <i class="fas fa-shield-alt input-icon"></i>
+                                <input type="text" id="twoFactorCode" name="twoFactorCode" placeholder="กรอกรหัส 6 หลัก" maxlength="6">
+                                <div class="input-focus-line"></div>
+                            </div>
+                        </div>
+                        <button type="button" class="verify-btn" onclick="verifyTwoFactor()">ยืนยันรหัส</button>
+                    </div>
+                </form>
+                
+                <div class="login-footer">
+                    <div class="quick-access">
+                        <button type="button" class="quick-login-btn" onclick="quickLogin()" title="เข้าสู่ระบบด่วน">
+                            <i class="fas fa-bolt"></i>
+                            <span>เข้าสู่ระบบด่วน</span>
+                        </button>
+                    </div>
+                    
+                    <div class="demo-credentials">
+                        <div class="credentials-header">
+                            <i class="fas fa-info-circle"></i>
+                            <span>ข้อมูลสำหรับทดสอบ</span>
+                        </div>
+                        <div class="credentials-content">
+                            <div class="credential-item">
+                                <span class="label">ชื่อผู้ใช้:</span>
+                                <span class="value">admin</span>
+                                <button class="copy-btn" onclick="copyToClipboard('admin')" title="คัดลอก">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="credential-item">
+                                <span class="label">รหัสผ่าน:</span>
+                                <span class="value">wawa2025</span>
+                                <button class="copy-btn" onclick="copyToClipboard('wawa2025')" title="คัดลอก">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="security-notice">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>การเข้าสู่ระบบของคุณได้รับการปกป้องด้วย SSL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-background">
+            <div class="bg-pattern">
+                <div class="pattern-dot"></div>
+                <div class="pattern-dot"></div>
+                <div class="pattern-dot"></div>
+                <div class="pattern-dot"></div>
+            </div>
+            <div class="gradient-overlay"></div>
+        </div>
+        
+        <!-- Modern Toast Notification -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+    
+    <!-- Modern Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner modern-loading">
+            <div class="spinner-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <p class="loading-text">กำลังเข้าสู่ระบบ...</p>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Immediate Script -->
+    <script>
+        // Modern loading management
+        (function() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+                overlay.classList.add('hidden');
+            }
+            
+            // Add modern features
+            document.documentElement.setAttribute('data-theme', 'modern');
+            
+            // Preload critical resources
+            const preloadImages = ['./logo.svg'];
+            preloadImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        })();
+    </script>
+    
+    <!-- Include Usability Enhancements -->
+    <script src="usability-enhancements.js"></script>
+    
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal" role="dialog" aria-labelledby="helpModalTitle" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="helpModalTitle"><i class="fas fa-question-circle"></i> ช่วยเหลือ - Admin Login</h2>
+                <button class="close-btn" onclick="closeHelpModal()" aria-label="ปิด">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3><i class="fas fa-key"></i> ข้อมูลการเข้าสู่ระบบ</h3>
+                    <ul>
+                        <li><strong>ชื่อผู้ใช้:</strong> admin</li>
+                        <li><strong>รหัสผ่าน:</strong> wawa2025</li>
+                        <li>ติ๊กช่อง "จดจำการเข้าสู่ระบบ" เพื่อไม่ต้องเข้าสู่ระบบซ้ำ</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3><i class="fas fa-keyboard"></i> คีย์ลัด</h3>
+                    <ul>
+                        <li><kbd>F1</kbd> - เปิดช่วยเหลือ</li>
+                        <li><kbd>Enter</kbd> - เข้าสู่ระบบ</li>
+                        <li><kbd>Escape</kbd> - ปิดหน้าต่าง</li>
+                        <li><kbd>Tab</kbd> - นำทางด้วยคีย์บอร์ด</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container" aria-live="polite"></div>
+    
+    <!-- Help Button -->
+    <button class="help-button" onclick="openHelpModal()" aria-label="เปิดช่วยเหลือ" title="ช่วยเหลือ (F1)">
+        <i class="fas fa-question"></i>
+    </button>
+    
+    <style>
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+    </style>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

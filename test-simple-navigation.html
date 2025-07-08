@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 ทดสอบเมนูแบบง่าย - Basic Navigation</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .test-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1f2937;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 14px;
+        }
+        .test-status h4 {
+            margin: 0 0 10px 0;
+            color: #60a5fa;
+        }
+        .click-counter {
+            background: #374151;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        .section-indicator {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="admin-body">
+    
+    <!-- Test Status Panel -->
+    <div class="test-status">
+        <h4>🔧 Navigation Tester</h4>
+        <div>หน้าปัจจุบัน: <span id="currentPage">แดชบอร์ด</span></div>
+        <div class="click-counter">
+            คลิกทั้งหมด: <span id="clickCount">0</span> ครั้ง
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="./logo.svg" alt="Logo" class="sidebar-logo">
+            <h3>Navigation Test</h3>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active">
+                    <a href="#dashboard" data-section="dashboard" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>แดชบอร์ด</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#rooms" data-section="rooms" class="nav-link">
+                        <i class="fas fa-bed"></i>
+                        <span>จัดการห้องเช่า</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#bookings" data-section="bookings" class="nav-link">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>การจองห้อง</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#issues" data-section="issues" class="nav-link">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>รายงานปัญหา</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contacts" data-section="contacts" class="nav-link">
+                        <i class="fas fa-envelope"></i>
+                        <span>ข้อความติดต่อ</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="header">
+            <div class="header-left">
+                <h1 id="pageTitle">แดชบอร์ด</h1>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2>📊 แดชบอร์ด</h2>
+                </div>
+                <div class="section-indicator">
+                    ✅ คุณอยู่ที่หน้า: <strong>แดชบอร์ด</strong><br>
+                    ลองกดเมนูอื่นๆ ในแถบข้างเพื่อทดสอบ Navigation
+                </div>
+            </section>
+
+            <!-- Rooms Section -->
+            <section id="rooms" class="content-section">
+                <div class="section-header">
+                    <h2>🏠 จัดการห้องเช่า</h2>
+                </div>
+                <div class="section-indicator">
+                    ✅ คุณอยู่ที่หน้า: <strong>จัดการห้องเช่า</strong><br>
+                    Navigation ทำงานได้แล้ว! 🎉
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+            <section id="bookings" class="content-section">
+                <div class="section-header">
+                    <h2>📅 การจองห้อง</h2>
+                </div>
+                <div class="section-indicator">
+                    ✅ คุณอยู่ที่หน้า: <strong>การจองห้อง</strong><br>
+                    Navigation ทำงานได้แล้ว! 🎉
+                </div>
+            </section>
+
+            <!-- Issues Section -->
+            <section id="issues" class="content-section">
+                <div class="section-header">
+                    <h2>⚠️ รายงานปัญหา</h2>
+                </div>
+                <div class="section-indicator">
+                    ✅ คุณอยู่ที่หน้า: <strong>รายงานปัญหา</strong><br>
+                    Navigation ทำงานได้แล้ว! 🎉
+                </div>
+            </section>
+
+            <!-- Contacts Section -->
+            <section id="contacts" class="content-section">
+                <div class="section-header">
+                    <h2>📧 ข้อความติดต่อ</h2>
+                </div>
+                <div class="section-indicator">
+                    ✅ คุณอยู่ที่หน้า: <strong>ข้อความติดต่อ</strong><br>
+                    Navigation ทำงานได้แล้ว! 🎉
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Simple Navigation Script -->
+    <script>
+        let clickCount = 0;
+        
+        // Simple navigation function
+        function simpleShowSection(sectionName) {
+            console.log(`Switching to section: ${sectionName}`);
+            
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show target section
+            const targetSection = document.getElementById(sectionName);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                
+                // Update page title
+                const pageTitle = document.getElementById('pageTitle');
+                const currentPageSpan = document.getElementById('currentPage');
+                
+                const titles = {
+                    'dashboard': 'แดชบอร์ด',
+                    'rooms': 'จัดการห้องเช่า',
+                    'bookings': 'การจองห้อง',
+                    'issues': 'รายงานปัญหา',
+                    'contacts': 'ข้อความติดต่อ'
+                };
+                
+                const title = titles[sectionName] || sectionName;
+                if (pageTitle) pageTitle.textContent = title;
+                if (currentPageSpan) currentPageSpan.textContent = title;
+                
+                console.log(`✅ Section ${sectionName} shown successfully`);
+                return true;
+            } else {
+                console.error(`❌ Section ${sectionName} not found`);
+                return false;
+            }
+        }
+        
+        // Initialize navigation when DOM is ready
+        function initializeSimpleNavigation() {
+            console.log('🔧 Initializing simple navigation...');
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            console.log(`Found ${navLinks.length} navigation links`);
+            
+            navLinks.forEach((link, index) => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    clickCount++;
+                    document.getElementById('clickCount').textContent = clickCount;
+                    
+                    const sectionName = this.getAttribute('data-section') || this.getAttribute('href').replace('#', '');
+                    console.log(`🖱️ Navigation clicked: ${sectionName} (click #${clickCount})`);
+                    
+                    // Update active state
+                    document.querySelectorAll('.nav-item').forEach(nav => {
+                        nav.classList.remove('active');
+                    });
+                    this.parentElement.classList.add('active');
+                    
+                    // Show section
+                    const success = simpleShowSection(sectionName);
+                    
+                    if (success) {
+                        console.log(`✅ Navigation to ${sectionName} successful!`);
+                    } else {
+                        console.error(`❌ Navigation to ${sectionName} failed!`);
+                    }
+                });
+                
+                console.log(`✅ Navigation link ${index + 1} initialized: ${link.getAttribute('data-section')}`);
+            });
+            
+            console.log('✅ Simple navigation initialization completed!');
+        }
+        
+        // Initialize immediately if DOM is ready, otherwise wait
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeSimpleNavigation);
+        } else {
+            initializeSimpleNavigation();
+        }
+        
+        // Additional safety check
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                // Re-initialize if needed
+                const navLinks = document.querySelectorAll('.nav-link');
+                if (navLinks.length > 0 && clickCount === 0) {
+                    console.log('🔄 Re-initializing navigation as backup...');
+                    initializeSimpleNavigation();
+                }
+            }, 500);
+        });
+        
+        console.log('📄 Simple navigation script loaded');
+    </script>
+</body>
+</html>

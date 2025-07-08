@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 ทดสอบแก้ไข Navigation - Admin Panel</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .test-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #1f2937;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 10000;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .test-panel h4 {
+            margin: 0 0 10px 0;
+            color: #60a5fa;
+        }
+        .test-panel button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 5px 5px 5px 0;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .test-panel button:hover {
+            background: #2563eb;
+        }
+        .test-panel .status {
+            font-size: 12px;
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .test-panel .status.success {
+            background: #065f46;
+            color: #d1fae5;
+        }
+        .test-panel .status.error {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+        .test-panel .status.info {
+            background: #1e3a8a;
+            color: #dbeafe;
+        }
+        .test-log {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #111827;
+            border-radius: 4px;
+            padding: 8px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <!-- Test Panel -->
+    <div class="test-panel">
+        <h4>🔧 Navigation Test Panel</h4>
+        
+        <div class="status info" id="initStatus">
+            ⏳ กำลังโหลด...
+        </div>
+        
+        <button onclick="testNavigation()">🔍 ทดสอบ Navigation</button>
+        <button onclick="testSections()">📄 ทดสอบ Sections</button>
+        <button onclick="clearLog()">🗑️ ล้าง Log</button>
+        <button onclick="location.reload()">🔄 Reload</button>
+        
+        <div id="testResults"></div>
+        <div class="test-log" id="testLog"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="./logo.svg" alt="Logo" class="sidebar-logo">
+            <h3>Admin Panel</h3>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active">
+                    <a href="#dashboard" onclick="showSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>แดชบอร์ด</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#rooms" onclick="showSection('rooms')">
+                        <i class="fas fa-bed"></i>
+                        <span>จัดการห้องเช่า</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#bookings" onclick="showSection('bookings')">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>การจองห้อง</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#issues" onclick="showSection('issues')">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>รายงานปัญหา</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contacts" onclick="showSection('contacts')">
+                        <i class="fas fa-envelope"></i>
+                        <span>ข้อความติดต่อ</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">แดชบอร์ด</h1>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2>📊 แดชบอร์ด</h2>
+                </div>
+                <div class="dashboard-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-bed"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>ห้องทั้งหมด</h3>
+                                <p class="stat-number">6</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>การจองห้อง</h3>
+                                <p class="stat-number">12</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p>✅ หน้า Dashboard โหลดสำเร็จ!</p>
+                </div>
+            </section>
+
+            <!-- Rooms Section -->
+            <section id="rooms" class="content-section">
+                <div class="section-header">
+                    <h2>🏠 จัดการห้องเช่า</h2>
+                </div>
+                <div class="rooms-content">
+                    <p>✅ หน้า Rooms โหลดสำเร็จ!</p>
+                    <p>🔍 ฟังก์ชัน loadRooms() จะถูกเรียกเมื่อเข้าหน้านี้</p>
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+            <section id="bookings" class="content-section">
+                <div class="section-header">
+                    <h2>📅 การจองห้อง</h2>
+                </div>
+                <div class="bookings-content">
+                    <p>✅ หน้า Bookings โหลดสำเร็จ!</p>
+                    <p>🔍 ฟังก์ชัน loadBookings() จะถูกเรียกเมื่อเข้าหน้านี้</p>
+                </div>
+            </section>
+
+            <!-- Issues Section -->
+            <section id="issues" class="content-section">
+                <div class="section-header">
+                    <h2>⚠️ รายงานปัญหา</h2>
+                </div>
+                <div class="issues-content">
+                    <p>✅ หน้า Issues โหลดสำเร็จ!</p>
+                    <p>🔍 ฟังก์ชัน loadIssues() จะถูกเรียกเมื่อเข้าหน้านี้</p>
+                </div>
+            </section>
+
+            <!-- Contacts Section -->
+            <section id="contacts" class="content-section">
+                <div class="section-header">
+                    <h2>📧 ข้อความติดต่อ</h2>
+                </div>
+                <div class="contacts-content">
+                    <p>✅ หน้า Contacts โหลดสำเร็จ!</p>
+                    <p>🔍 ฟังก์ชัน loadContacts() จะถูกเรียกเมื่อเข้าหน้านี้</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Test Scripts -->
+    <script>
+        // Test logging function
+        function logTest(message, type = 'info') {
+            const logElement = document.getElementById('testLog');
+            const timestamp = new Date().toLocaleTimeString('th-TH');
+            const logLine = `[${timestamp}] ${message}\n`;
+            logElement.textContent += logLine;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        // Test navigation
+        function testNavigation() {
+            logTest('🔍 เริ่มทดสอบ Navigation...', 'info');
+            
+            const navItems = document.querySelectorAll('.nav-item a');
+            logTest(`📋 พบ Navigation Items: ${navItems.length} รายการ`);
+            
+            navItems.forEach((item, index) => {
+                const href = item.getAttribute('href');
+                const onclick = item.getAttribute('onclick');
+                logTest(`${index + 1}. ${href} - onclick: ${onclick || 'ไม่มี'}`);
+            });
+            
+            // Test click events
+            logTest('🖱️ ทดสอบการกด Navigation...');
+            navItems.forEach((item, index) => {
+                item.addEventListener('click', function(e) {
+                    const section = e.target.closest('a').getAttribute('href').replace('#', '');
+                    logTest(`✅ Navigation ${index + 1} (${section}) ถูกกด!`, 'success');
+                });
+            });
+            
+            updateStatus('Navigation test completed', 'success');
+        }
+
+        // Test sections
+        function testSections() {
+            logTest('📄 เริ่มทดสอบ Sections...', 'info');
+            
+            const sections = document.querySelectorAll('.content-section');
+            logTest(`📋 พบ Sections: ${sections.length} รายการ`);
+            
+            sections.forEach((section, index) => {
+                const id = section.id;
+                const isActive = section.classList.contains('active');
+                logTest(`${index + 1}. Section: ${id} - Active: ${isActive ? 'Yes' : 'No'}`);
+            });
+            
+            updateStatus('Section test completed', 'success');
+        }
+
+        // Clear log
+        function clearLog() {
+            document.getElementById('testLog').textContent = '';
+        }
+
+        // Update status
+        function updateStatus(message, type) {
+            const statusElement = document.getElementById('initStatus');
+            statusElement.textContent = message;
+            statusElement.className = `status ${type}`;
+        }
+
+        // Initialize test
+        function initializeTest() {
+            logTest('🚀 เริ่มต้นระบบทดสอบ Navigation Fix');
+            logTest('📄 DOM Ready State: ' + document.readyState);
+            
+            // Check if admin script is loaded
+            if (typeof showSection === 'function') {
+                logTest('✅ admin-script.js โหลดแล้ว');
+                updateStatus('Admin script loaded', 'success');
+            } else {
+                logTest('❌ admin-script.js ยังไม่โหลด');
+                updateStatus('Admin script not loaded', 'error');
+            }
+            
+            // Check navigation items
+            const navItems = document.querySelectorAll('.nav-item a');
+            logTest(`📋 พบ Navigation Items: ${navItems.length} รายการ`);
+            
+            if (navItems.length > 0) {
+                updateStatus('Navigation elements found', 'success');
+            } else {
+                updateStatus('No navigation elements', 'error');
+            }
+        }
+
+        // Auto-initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeTest);
+        } else {
+            initializeTest();
+        }
+    </script>
+
+    <!-- Load Admin Script -->
+    <script src="admin-script.js"></script>
+
+    <!-- Post-load test -->
+    <script>
+        setTimeout(() => {
+            logTest('⏰ Post-load check...');
+            
+            if (typeof showSection === 'function') {
+                logTest('✅ showSection function is available');
+            } else {
+                logTest('❌ showSection function not found');
+            }
+            
+            if (typeof initializeSidebar === 'function') {
+                logTest('✅ initializeSidebar function is available');
+            } else {
+                logTest('❌ initializeSidebar function not found');
+            }
+            
+            // Test direct function call
+            try {
+                showSection('rooms');
+                logTest('✅ Direct showSection call successful');
+                setTimeout(() => showSection('dashboard'), 1000);
+            } catch (error) {
+                logTest('❌ Direct showSection call failed: ' + error.message);
+            }
+            
+        }, 1000);
+    </script>
+</body>
+</html>

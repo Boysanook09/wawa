@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 แก้ไขปัญหาเมนูกดไม่ได้ - ครั้งที่ 2</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .fix-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            z-index: 10000;
+            max-width: 350px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .fix-panel h4 {
+            margin: 0 0 15px 0;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .fix-panel button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 5px 5px 5px 0;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        .fix-panel button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        .fix-panel .status {
+            font-size: 12px;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        .fix-panel .status.success {
+            background: rgba(16, 185, 129, 0.8);
+            color: white;
+        }
+        .fix-panel .status.error {
+            background: rgba(239, 68, 68, 0.8);
+            color: white;
+        }
+        .fix-panel .status.info {
+            background: rgba(59, 130, 246, 0.8);
+            color: white;
+        }
+        .fix-log {
+            max-height: 250px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+        .fix-log::-webkit-scrollbar {
+            width: 6px;
+        }
+        .fix-log::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        .click-indicator {
+            position: absolute;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ff6b6b;
+            border-radius: 50%;
+            background: rgba(255, 107, 107, 0.2);
+            animation: clickPulse 0.6s ease-out;
+            z-index: 9999;
+        }
+        @keyframes clickPulse {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <!-- Fix Panel -->
+    <div class="fix-panel">
+        <h4>🚀 Navigation Fix Panel v2</h4>
+        
+        <div class="status info" id="fixStatus">
+            ⏳ เริ่มต้นการแก้ไข...
+        </div>
+        
+        <button onclick="forceFixNavigation()">🔧 แก้ไขการกด Force</button>
+        <button onclick="testAllMenus()">🔍 ทดสอบเมนูทั้งหมด</button>
+        <button onclick="debugNavigation()">🐛 Debug Navigation</button>
+        <button onclick="clearFixLog()">🗑️ ล้าง Log</button>
+        <button onclick="location.reload()">🔄 Reload หน้า</button>
+        
+        <div class="fix-log" id="fixLog"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="./logo.svg" alt="Logo" class="sidebar-logo">
+            <h3>Admin Panel - Fix v2</h3>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active">
+                    <a href="#dashboard" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>แดชบอร์ด</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#rooms" data-section="rooms">
+                        <i class="fas fa-bed"></i>
+                        <span>จัดการห้องเช่า</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#bookings" data-section="bookings">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>การจองห้อง</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#issues" data-section="issues">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>รายงานปัญหา</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contacts" data-section="contacts">
+                        <i class="fas fa-envelope"></i>
+                        <span>ข้อความติดต่อ</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">แดชบอร์ด</h1>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2>📊 แดชบอร์ด</h2>
+                    <p class="section-description">หน้าหลักของระบบ Admin Panel</p>
+                </div>
+                <div class="dashboard-content">
+                    <div class="test-result-card">
+                        <h3>✅ หน้า Dashboard</h3>
+                        <p>หน้านี้แสดงได้แล้ว - Navigation สำเร็จ!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rooms Section -->
+            <section id="rooms" class="content-section">
+                <div class="section-header">
+                    <h2>🏠 จัดการห้องเช่า</h2>
+                    <p class="section-description">ระบบจัดการห้องเช่าทั้งหมด</p>
+                </div>
+                <div class="rooms-content">
+                    <div class="test-result-card">
+                        <h3>✅ หน้า Rooms</h3>
+                        <p>หน้านี้แสดงได้แล้ว - Navigation สำเร็จ!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+            <section id="bookings" class="content-section">
+                <div class="section-header">
+                    <h2>📅 การจองห้อง</h2>
+                    <p class="section-description">จัดการการจองห้องทั้งหมด</p>
+                </div>
+                <div class="bookings-content">
+                    <div class="test-result-card">
+                        <h3>✅ หน้า Bookings</h3>
+                        <p>หน้านี้แสดงได้แล้ว - Navigation สำเร็จ!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Issues Section -->
+            <section id="issues" class="content-section">
+                <div class="section-header">
+                    <h2>⚠️ รายงานปัญหา</h2>
+                    <p class="section-description">จัดการปัญหาและข้อร้องเรียน</p>
+                </div>
+                <div class="issues-content">
+                    <div class="test-result-card">
+                        <h3>✅ หน้า Issues</h3>
+                        <p>หน้านี้แสดงได้แล้ว - Navigation สำเร็จ!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contacts Section -->
+            <section id="contacts" class="content-section">
+                <div class="section-header">
+                    <h2>📧 ข้อความติดต่อ</h2>
+                    <p class="section-description">จัดการข้อความติดต่อจากลูกค้า</p>
+                </div>
+                <div class="contacts-content">
+                    <div class="test-result-card">
+                        <h3>✅ หน้า Contacts</h3>
+                        <p>หน้านี้แสดงได้แล้ว - Navigation สำเร็จ!</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Additional CSS for test cards -->
+    <style>
+        .test-result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .test-result-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        .test-result-card p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        .section-description {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+    </style>
+
+    <!-- Fix Scripts -->
+    <script>
+        // Enhanced logging with timestamps
+        function logFix(message, type = 'info') {
+            const logElement = document.getElementById('fixLog');
+            const timestamp = new Date().toLocaleTimeString('th-TH', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            const typeIcon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            const logLine = `[${timestamp}] ${typeIcon} ${message}\n`;
+            logElement.textContent += logLine;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[FIX] ${message}`);
+        }
+
+        // Force fix navigation with enhanced methods
+        function forceFixNavigation() {
+            logFix('🔧 เริ่มต้นการแก้ไข Navigation แบบ Force...', 'info');
+            
+            try {
+                // Method 1: Remove and re-add event listeners
+                const navItems = document.querySelectorAll('.sidebar-nav a');
+                logFix(`พบ Navigation Items: ${navItems.length} รายการ`);
+                
+                navItems.forEach((item, index) => {
+                    // Remove all existing event listeners by cloning
+                    const newItem = item.cloneNode(true);
+                    item.parentNode.replaceChild(newItem, item);
+                    
+                    // Add multiple event types
+                    ['click', 'mousedown', 'touchstart'].forEach(eventType => {
+                        newItem.addEventListener(eventType, function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            const section = this.getAttribute('data-section') || this.getAttribute('href').replace('#', '');
+                            logFix(`${eventType.toUpperCase()} Event: ${section}`, 'success');
+                            
+                            // Visual feedback
+                            addClickIndicator(e);
+                            
+                            // Update active state
+                            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                            this.parentElement.classList.add('active');
+                            
+                            // Show section
+                            if (typeof showSection === 'function') {
+                                showSection(section);
+                            } else {
+                                manualShowSection(section);
+                            }
+                        });
+                    });
+                    
+                    logFix(`✅ แก้ไข nav item ${index + 1}: ${newItem.getAttribute('data-section')}`);
+                });
+                
+                updateFixStatus('Navigation แก้ไขเสร็จแล้ว!', 'success');
+                logFix('🎉 แก้ไข Navigation สำเร็จ!', 'success');
+                
+            } catch (error) {
+                logFix(`❌ เกิดข้อผิดพลาด: ${error.message}`, 'error');
+                updateFixStatus('เกิดข้อผิดพลาดในการแก้ไข', 'error');
+            }
+        }
+
+        // Manual show section function
+        function manualShowSection(sectionName) {
+            logFix(`📄 Manual section switch: ${sectionName}`, 'info');
+            
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show target section
+            const targetSection = document.getElementById(sectionName);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                
+                // Update page title
+                const pageTitle = document.getElementById('pageTitle');
+                if (pageTitle) {
+                    const titles = {
+                        'dashboard': 'แดชบอร์ด',
+                        'rooms': 'จัดการห้องเช่า',
+                        'bookings': 'การจองห้อง',
+                        'issues': 'รายงานปัญหา',
+                        'contacts': 'ข้อความติดต่อ'
+                    };
+                    pageTitle.textContent = titles[sectionName] || sectionName;
+                }
+                
+                logFix(`✅ แสดงหน้า ${sectionName} สำเร็จ`, 'success');
+            } else {
+                logFix(`❌ ไม่พบหน้า ${sectionName}`, 'error');
+            }
+        }
+
+        // Add visual click indicator
+        function addClickIndicator(event) {
+            const indicator = document.createElement('div');
+            indicator.className = 'click-indicator';
+            indicator.style.left = (event.clientX - 10) + 'px';
+            indicator.style.top = (event.clientY - 10) + 'px';
+            
+            document.body.appendChild(indicator);
+            
+            setTimeout(() => {
+                if (indicator.parentNode) {
+                    indicator.parentNode.removeChild(indicator);
+                }
+            }, 600);
+        }
+
+        // Test all menus systematically
+        function testAllMenus() {
+            logFix('🔍 เริ่มทดสอบเมนูทั้งหมด...', 'info');
+            
+            const navItems = document.querySelectorAll('.sidebar-nav a');
+            let testIndex = 0;
+            
+            function testNext() {
+                if (testIndex < navItems.length) {
+                    const item = navItems[testIndex];
+                    const section = item.getAttribute('data-section') || item.getAttribute('href').replace('#', '');
+                    
+                    logFix(`📋 ทดสอบเมนู ${testIndex + 1}: ${section}`, 'info');
+                    
+                    // Simulate click
+                    try {
+                        item.click();
+                        logFix(`✅ เมนู ${section} ทำงานได้`, 'success');
+                    } catch (error) {
+                        logFix(`❌ เมนู ${section} ทำงานไม่ได้: ${error.message}`, 'error');
+                    }
+                    
+                    testIndex++;
+                    setTimeout(testNext, 1000);
+                } else {
+                    logFix('🎉 ทดสอบเมนูทั้งหมดเสร็จแล้ว!', 'success');
+                    updateFixStatus('ทดสอบเมนูเสร็จแล้ว', 'success');
+                }
+            }
+            
+            testNext();
+        }
+
+        // Debug navigation with detailed info
+        function debugNavigation() {
+            logFix('🐛 เริ่ม Debug Navigation...', 'info');
+            
+            // Check if admin-script.js loaded
+            logFix(`admin-script.js loaded: ${typeof showSection !== 'undefined'}`, 'info');
+            logFix(`initializeSidebar exists: ${typeof initializeSidebar !== 'undefined'}`, 'info');
+            logFix(`handleNavClick exists: ${typeof handleNavClick !== 'undefined'}`, 'info');
+            
+            // Check navigation elements
+            const navItems = document.querySelectorAll('.sidebar-nav a');
+            logFix(`Navigation items found: ${navItems.length}`, 'info');
+            
+            navItems.forEach((item, index) => {
+                const href = item.getAttribute('href');
+                const dataSection = item.getAttribute('data-section');
+                const hasClickListener = item.onclick !== null;
+                
+                logFix(`Nav ${index + 1}: href=${href}, data-section=${dataSection}, hasClick=${hasClickListener}`, 'info');
+            });
+            
+            // Check sections
+            const sections = document.querySelectorAll('.content-section');
+            logFix(`Content sections found: ${sections.length}`, 'info');
+            
+            sections.forEach((section, index) => {
+                const id = section.id;
+                const isActive = section.classList.contains('active');
+                logFix(`Section ${index + 1}: id=${id}, active=${isActive}`, 'info');
+            });
+            
+            updateFixStatus('Debug เสร็จแล้ว - ดู Log', 'info');
+        }
+
+        // Clear log
+        function clearFixLog() {
+            document.getElementById('fixLog').textContent = '';
+            logFix('📝 Log ถูกล้างแล้ว', 'info');
+        }
+
+        // Update status
+        function updateFixStatus(message, type) {
+            const statusElement = document.getElementById('fixStatus');
+            statusElement.textContent = message;
+            statusElement.className = `status ${type}`;
+        }
+
+        // Auto-start fix on load
+        document.addEventListener('DOMContentLoaded', function() {
+            logFix('🚀 หน้าโหลดเสร็จ - เริ่มแก้ไขอัตโนมัติ', 'info');
+            updateFixStatus('กำลังแก้ไข Navigation...', 'info');
+            
+            setTimeout(() => {
+                forceFixNavigation();
+            }, 500);
+        });
+
+        // Additional safety net
+        window.addEventListener('load', function() {
+            logFix('🌐 Window load - แก้ไขเพิ่มเติม', 'info');
+            setTimeout(() => {
+                forceFixNavigation();
+            }, 800);
+        });
+    </script>
+
+    <!-- Load Admin Script -->
+    <script src="admin-script.js"></script>
+
+    <!-- Post-load verification -->
+    <script>
+        setTimeout(() => {
+            logFix('⏰ Post-load verification...', 'info');
+            
+            if (typeof showSection === 'function') {
+                logFix('✅ showSection function available', 'success');
+                
+                // Test direct function call
+                try {
+                    showSection('dashboard');
+                    logFix('✅ Direct showSection call successful', 'success');
+                } catch (error) {
+                    logFix(`❌ Direct showSection failed: ${error.message}`, 'error');
+                }
+            } else {
+                logFix('❌ showSection function not found', 'error');
+            }
+            
+        }, 1500);
+    </script>
+</body>
+</html>

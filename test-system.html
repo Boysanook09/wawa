@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ทดสอบระบบ - Wawa Baansoan Minimar</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        .test-button {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            background: #1a365d;
+            transform: translateY(-2px);
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .loading-overlay.hidden { display: none !important; visibility: hidden !important; }
+        #trackStatusBtn.hidden { display: none !important; }
+        
+        /* Modern enhancements */
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+        
+        /* Enhanced accessibility */
+        .test-button:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .test-button, .help-button {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main id="main-content" role="main">
+        <div class="test-container">
+            <header>
+                <h1><i class="fas fa-bug"></i> ทดสอบระบบ Wawa Baansoan Minimar</h1>
+                <button class="help-button" onclick="openHelpModal()" aria-label="เปิดช่วยเหลือ" title="ช่วยเหลือ (F1)">
+                    <i class="fas fa-question"></i>
+                </button>
+            </header>
+        
+        <div class="test-section">
+            <h2><i class="fas fa-spinner"></i> ทดสอบ Loading Overlay</h2>
+            <p>ทดสอบการทำงานของระบบ Loading</p>
+            <button class="test-button" onclick="testShowLoading()">แสดง Loading</button>
+            <button class="test-button" onclick="testHideLoading()">ซ่อน Loading</button>
+            <div id="loadingTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-bell"></i> ทดสอบ Notification</h2>
+            <p>ทดสอบการแจ้งเตือนแบบต่างๆ</p>
+            <button class="test-button" onclick="testNotificationSuccess()">แจ้งเตือน Success</button>
+            <button class="test-button" onclick="testNotificationError()">แจ้งเตือน Error</button>
+            <button class="test-button" onclick="testNotificationWarning()">แจ้งเตือน Warning</button>
+            <button class="test-button" onclick="testNotificationInfo()">แจ้งเตือน Info</button>
+            <div id="notificationTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-check-circle"></i> ทดสอบ Success Modal</h2>
+            <p>ทดสอบ Modal แสดงความสำเร็จ</p>
+            <button class="test-button" onclick="testSuccessModal()">แสดง Success Modal</button>
+            <button class="test-button" onclick="testSuccessWithTracking()">Success + Tracking</button>
+            <div id="modalTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-search"></i> ทดสอบ Status Tracking</h2>
+            <p>ทดสอบระบบติดตามสถานะ</p>
+            <button class="test-button" onclick="testStatusTracking()">เปิด Status Tracking</button>
+            <div id="trackingTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-home"></i> ทดสอบ Rooms Widget</h2>
+            <p>ทดสอบการอัปเดตข้อมูลห้องพัก</p>
+            <button class="test-button" onclick="testRoomsUpdate()">อัปเดตข้อมูลห้อง</button>
+            <div id="roomsTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-database"></i> ทดสอบ LocalStorage</h2>
+            <p>ทดสอบการเก็บข้อมูลใน LocalStorage</p>
+            <button class="test-button" onclick="testLocalStorage()">ทดสอบ LocalStorage</button>
+            <button class="test-button" onclick="clearLocalStorage()">ล้าง LocalStorage</button>
+            <div id="storageTest" class="test-result info">พร้อมทดสอบ</div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-link"></i> ลิงก์ไปหน้าต่างๆ</h2>
+            <p>เข้าสู่หน้าต่างๆ ของเว็บไซต์</p>
+            <button class="test-button" onclick="window.open('index.html', '_blank')">หน้าแรก</button>
+            <button class="test-button" onclick="window.open('admin-login.html', '_blank')">Admin Login</button>
+            <button class="test-button" onclick="window.open('admin-dashboard.html', '_blank')">Admin Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Include main components from index.html -->
+    <div id="notificationContainer" class="notification-container"></div>
+    
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>กำลังประมวลผล...</p>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal success-modal">
+        <div class="modal-content success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="success-text">
+                <h3 id="successTitle">สำเร็จ!</h3>
+                <p id="successMessage">การดำเนินการเสร็จสิ้น</p>
+            </div>
+            <div class="success-actions">
+                <button id="trackStatusBtn" class="btn btn-primary hidden">
+                    <i class="fas fa-search"></i> ติดตามสถานะ
+                </button>
+                <button class="btn btn-secondary" onclick="closeSuccessModal()">ปิด</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Test functions
+        function testShowLoading() {
+            document.getElementById('loadingTest').innerHTML = '<span class="info">กำลังแสดง Loading...</span>';
+            showLoading('ทดสอบ Loading Overlay...');
+            setTimeout(() => {
+                document.getElementById('loadingTest').innerHTML = '<span class="success">✅ Loading แสดงแล้ว (จะหายไปอัตโนมัติใน 3 วินาที)</span>';
+                setTimeout(testHideLoading, 3000);
+            }, 500);
+        }
+
+        function testHideLoading() {
+            hideLoading();
+            document.getElementById('loadingTest').innerHTML = '<span class="success">✅ Loading ถูกซ่อนแล้ว</span>';
+        }
+
+        function testNotificationSuccess() {
+            showNotification('ทดสอบสำเร็จ!', 'Notification Success ทำงานปกติ', 'success');
+            document.getElementById('notificationTest').innerHTML = '<span class="success">✅ Success Notification แสดงแล้ว</span>';
+        }
+
+        function testNotificationError() {
+            showNotification('เกิดข้อผิดพลาด!', 'Notification Error ทำงานปกติ', 'error');
+            document.getElementById('notificationTest').innerHTML = '<span class="error">⚠️ Error Notification แสดงแล้ว</span>';
+        }
+
+        function testNotificationWarning() {
+            showNotification('คำเตือน!', 'Notification Warning ทำงานปกติ', 'warning');
+            document.getElementById('notificationTest').innerHTML = '<span class="error">⚠️ Warning Notification แสดงแล้ว</span>';
+        }
+
+        function testNotificationInfo() {
+            showNotification('ข้อมูล', 'Notification Info ทำงานปกติ', 'info');
+            document.getElementById('notificationTest').innerHTML = '<span class="info">ℹ️ Info Notification แสดงแล้ว</span>';
+        }
+
+        function testSuccessModal() {
+            showSuccessModal('ทดสอบ Success Modal', 'Modal ทำงานปกติ!');
+            document.getElementById('modalTest').innerHTML = '<span class="success">✅ Success Modal แสดงแล้ว</span>';
+        }
+
+        function testSuccessWithTracking() {
+            showSuccessModal('ทดสอบ Modal + Tracking', 'Modal พร้อมปุ่มติดตามสถานะ', true, 'TEST123');
+            document.getElementById('modalTest').innerHTML = '<span class="success">✅ Success Modal + Tracking แสดงแล้ว</span>';
+        }
+
+        function testStatusTracking() {
+            // Simulate opening status tracking modal
+            document.getElementById('trackingTest').innerHTML = '<span class="info">📊 เปิดระบบติดตามสถานะ (ถ้ามีข้อมูลใน LocalStorage)</span>';
+            // This would normally open the status tracking modal
+            showNotification('ทดสอบ Tracking', 'ระบบติดตามสถานะ (ต้องมีข้อมูลการจองก่อน)', 'info');
+        }
+
+        function testRoomsUpdate() {
+            if (typeof updateRoomsWidget === 'function') {
+                updateRoomsWidget();
+                document.getElementById('roomsTest').innerHTML = '<span class="success">✅ Rooms Widget อัปเดตแล้ว</span>';
+            } else {
+                document.getElementById('roomsTest').innerHTML = '<span class="error">❌ ไม่พบฟังก์ชัน updateRoomsWidget</span>';
+            }
+        }
+
+        function testLocalStorage() {
+            try {
+                // Test write
+                localStorage.setItem('testKey', 'testValue');
+                
+                // Test read
+                const value = localStorage.getItem('testKey');
+                
+                if (value === 'testValue') {
+                    document.getElementById('storageTest').innerHTML = '<span class="success">✅ LocalStorage ทำงานปกติ</span>';
+                } else {
+                    document.getElementById('storageTest').innerHTML = '<span class="error">❌ LocalStorage อ่านข้อมูลไม่ถูกต้อง</span>';
+                }
+            } catch (error) {
+                document.getElementById('storageTest').innerHTML = '<span class="error">❌ LocalStorage ไม่ทำงาน: ' + error.message + '</span>';
+            }
+        }
+
+        function clearLocalStorage() {
+            try {
+                localStorage.clear();
+                document.getElementById('storageTest').innerHTML = '<span class="success">✅ LocalStorage ถูกล้างแล้ว</span>';
+            } catch (error) {
+                document.getElementById('storageTest').innerHTML = '<span class="error">❌ ไม่สามารถล้าง LocalStorage: ' + error.message + '</span>';
+            }
+        }
+
+        // Auto-hide loading on page load
+        window.addEventListener('load', function() {
+            hideLoading();
+            console.log('✅ ทดสอบระบบโหลดเสร็จสิ้น');
+        });
+    </script>
+    
+    <!-- Include Usability Enhancements -->
+    <script src="usability-enhancements.js"></script>
+    
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal" role="dialog" aria-labelledby="helpModalTitle" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="helpModalTitle"><i class="fas fa-question-circle"></i> ช่วยเหลือ - ทดสอบระบบ</h2>
+                <button class="close-btn" onclick="closeHelpModal()" aria-label="ปิด">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3><i class="fas fa-play-circle"></i> วิธีใช้งาน</h3>
+                    <ul>
+                        <li>กดปุ่มทดสอบเพื่อตรวจสอบฟังก์ชันต่างๆ ของระบบ</li>
+                        <li>ดูผลลัพธ์ในช่องด้านล่างแต่ละปุ่ม</li>
+                        <li>ระบบจะทดสอบ Loading, Notification, Modal, Status Tracking และ LocalStorage</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3><i class="fas fa-keyboard"></i> คีย์ลัด</h3>
+                    <ul>
+                        <li><kbd>F1</kbd> - เปิดช่วยเหลือ</li>
+                        <li><kbd>Escape</kbd> - ปิดหน้าต่าง</li>
+                        <li><kbd>Tab</kbd> - นำทางด้วยคีย์บอร์ด</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container" aria-live="polite"></div>
+</body>
+</html>

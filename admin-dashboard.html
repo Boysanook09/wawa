@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Wawa Baansoan Minimar</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="./logo.svg" alt="Logo" class="sidebar-logo">
+            <h3>Admin Panel</h3>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active">
+                    <a href="#dashboard" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>แดชบอร์ด</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#rooms" data-section="rooms">
+                        <i class="fas fa-bed"></i>
+                        <span>จัดการห้องเช่า</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#bookings" data-section="bookings">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>การจองห้อง</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#issues" data-section="issues">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>รายงานปัญหา</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contacts" data-section="contacts">
+                        <i class="fas fa-envelope"></i>
+                        <span>ข้อความติดต่อ</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#ai-analytics" data-section="ai-analytics">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Analytics</span>
+                        <span class="badge new">NEW</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>ตั้งค่า</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Admin User</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                ออกจากระบบ
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()" title="เปิด/ปิดแถบข้างเคียง" aria-label="สลับแถบข้างเคียง">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">แดชบอร์ด</h1>
+            </div>
+            <div class="header-right">
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                    </button>
+                </div>
+                <div class="current-time" id="currentTime"></div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon rooms">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalRooms">16</h3>
+                        <p>ห้องทั้งหมด</p>
+                        <span class="stat-detail">ว่าง 8 ห้อง</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon bookings">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalBookings">12</h3>
+                        <p>การจองวันนี้</p>
+                        <span class="stat-detail">+3 จากเมื่อวาน</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon issues">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalIssues">5</h3>
+                        <p>ปัญหารอแก้ไข</p>
+                        <span class="stat-detail urgent">2 เร่งด่วน</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon revenue">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="monthlyRevenue">285,000</h3>
+                        <p>รายได้เดือนนี้</p>
+                        <span class="stat-detail">+12% จากเดือนที่แล้ว</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="recent-activities">
+                    <h3>กิจกรรมล่าสุด</h3>
+                    <div class="activity-list" id="activityList">
+                        <!-- Activities will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="quick-actions">
+                    <h3>ดำเนินการด่วน</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="showSection('rooms')">
+                            <i class="fas fa-plus"></i>
+                            เพิ่มห้องใหม่
+                        </button>
+                        <button class="action-btn" onclick="showSection('bookings')">
+                            <i class="fas fa-calendar"></i>
+                            ดูการจอง
+                        </button>
+                        <button class="action-btn urgent" onclick="showSection('issues')">
+                            <i class="fas fa-exclamation"></i>
+                            ปัญหาเร่งด่วน
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rooms Management Section -->
+        <section id="rooms" class="content-section">
+            <div class="section-header">
+                <h2>จัดการห้องเช่า</h2>
+                <button class="add-btn" onclick="openAddRoomModal()">
+                    <i class="fas fa-plus"></i>
+                    เพิ่มห้องใหม่
+                </button>
+            </div>
+            
+            <div class="filters">
+                <select id="roomStatusFilter" onchange="filterRooms()" title="กรองตามสถานะห้อง" aria-label="เลือกสถานะห้องเพื่อกรอง">
+                    <option value="">ทุกสถานะ</option>
+                    <option value="available">ว่าง</option>
+                    <option value="occupied">มีผู้เช่า</option>
+                    <option value="maintenance">ซ่อมแซม</option>
+                </select>
+                <select id="roomTypeFilter" onchange="filterRooms()" title="กรองตามประเภทห้อง" aria-label="เลือกประเภทห้องเพื่อกรอง">
+                    <option value="">ทุกประเภท</option>
+                    <option value="fan">ห้องแฟน</option>
+                    <option value="standard">ห้องสแตนดาร์ด</option>
+                    <option value="deluxe">ห้องดีลักซ์</option>
+                    <option value="studio">ห้องสตูดิโอ</option>
+                </select>
+            </div>
+            
+            <div class="rooms-grid" id="roomsGrid">
+                <!-- Rooms will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Bookings Section -->
+        <section id="bookings" class="content-section">
+            <div class="section-header">
+                <h2>การจองห้อง</h2>
+                <div class="booking-filters">
+                    <select id="bookingStatusFilter" onchange="filterBookings()" title="กรองตามสถานะการจอง" aria-label="เลือกสถานะการจองเพื่อกรอง">
+                        <option value="">ทุกสถานะ</option>
+                        <option value="pending">รอยืนยัน</option>
+                        <option value="confirmed">ยืนยันแล้ว</option>
+                        <option value="checked-in">เช็คอินแล้ว</option>
+                        <option value="cancelled">ยกเลิก</option>
+                    </select>
+                    <input type="date" id="bookingDateFilter" onchange="filterBookings()" title="กรองตามวันที่จอง" placeholder="เลือกวันที่">
+                </div>
+            </div>
+            
+            <div class="bookings-table-container">
+                <table class="data-table" id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>หมายเลขจอง</th>
+                            <th>ชื่อผู้จอง</th>
+                            <th>ห้อง</th>
+                            <th>วันที่เข้าพัก</th>
+                            <th>ระยะเวลา</th>
+                            <th>ยอดเงิน</th>
+                            <th>สถานะ</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <!-- Bookings will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Issues Section -->
+        <section id="issues" class="content-section">
+            <div class="section-header">
+                <h2>รายงานปัญหา</h2>
+                <div class="issue-filters">
+                    <select id="issueStatusFilter" onchange="filterIssues()" title="กรองตามสถานะปัญหา" aria-label="เลือกสถานะปัญหาเพื่อกรอง">
+                        <option value="">ทุกสถานะ</option>
+                        <option value="pending">รอดำเนินการ</option>
+                        <option value="in-progress">กำลังแก้ไข</option>
+                        <option value="resolved">แก้ไขแล้ว</option>
+                    </select>
+                    <select id="issueUrgencyFilter" onchange="filterIssues()" title="กรองตามความเร่งด่วน" aria-label="เลือกระดับความเร่งด่วนเพื่อกรอง">
+                        <option value="">ทุกระดับ</option>
+                        <option value="urgent">เร่งด่วน</option>
+                        <option value="normal">ปกติ</option>
+                        <option value="low">ไม่เร่งด่วน</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="issues-grid" id="issuesGrid">
+                <!-- Issues will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Contacts Section -->
+        <section id="contacts" class="content-section">
+            <div class="section-header">
+                <h2>ข้อความติดต่อ</h2>
+            </div>
+            
+            <div class="contacts-table-container">
+                <table class="data-table" id="contactsTable">
+                    <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>ชื่อ</th>
+                            <th>เบอร์โทร</th>
+                            <th>ประเภทห้อง</th>
+                            <th>ข้อความ</th>
+                            <th>สถานะ</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactsTableBody">
+                        <!-- Contacts will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="content-section">
+            <div class="section-header">
+                <h2>ตั้งค่าระบบ</h2>
+            </div>
+            
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>ข้อมูลติดต่อ</h3>
+                    <form id="contactSettingsForm">
+                        <div class="form-group">
+                            <label for="settingsPhone">เบอร์โทรศัพท์</label>
+                            <input type="tel" id="settingsPhone" value="0896288668">
+                        </div>
+                        <div class="form-group">
+                            <label for="settingsEmail">อีเมล</label>
+                            <input type="email" id="settingsEmail" value="info@baansoanminima.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="settingsAddress">ที่อยู่</label>
+                            <textarea id="settingsAddress" rows="3">28 หมู่ 19 อำเภอเมืองสุรินทร์ สุรินทร์ 32000</textarea>
+                        </div>
+                        <button type="submit" class="save-btn">บันทึกการเปลี่ยนแปลง</button>
+                    </form>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>การแจ้งเตือน</h3>
+                    <div class="notification-settings">
+                        <label class="switch-wrapper">
+                            <input type="checkbox" id="emailNotifications" checked>
+                            <span class="switch"></span>
+                            แจ้งเตือนทางอีเมล
+                        </label>
+                        <label class="switch-wrapper">
+                            <input type="checkbox" id="urgentNotifications" checked>
+                            <span class="switch"></span>
+                            แจ้งเตือนปัญหาเร่งด่วน
+                        </label>
+                        <label class="switch-wrapper">
+                            <input type="checkbox" id="bookingNotifications" checked>
+                            <span class="switch"></span>
+                            แจ้งเตือนการจองใหม่
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>เปลี่ยนรหัสผ่าน</h3>
+                    <form id="passwordChangeForm">
+                        <div class="form-group">
+                            <label for="currentPassword">รหัสผ่านเดิม</label>
+                            <input type="password" id="currentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">รหัสผ่านใหม่</label>
+                            <input type="password" id="newPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">ยืนยันรหัสผ่านใหม่</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="save-btn">เปลี่ยนรหัสผ่าน</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Analytics Section -->
+        <section id="ai-analytics" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-robot"></i> AI Analytics & Insights</h2>
+                <p>วิเคราะห์ข้อมูลด้วย AI และดูข้อมูลเชิงลึกของระบบ</p>
+            </div>
+            
+            <!-- AI Overview Cards -->
+            <div class="ai-overview-grid">
+                <div class="ai-card ai-chatbot-stats">
+                    <div class="ai-card-header">
+                        <h3><i class="fas fa-comments"></i> AI Chatbot</h3>
+                        <div class="ai-status online">Active</div>
+                    </div>
+                    <div class="ai-metrics">
+                        <div class="metric">
+                            <span class="metric-value" id="chatInteractions">0</span>
+                            <span class="metric-label">Conversations Today</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="chatSatisfaction">95%</span>
+                            <span class="metric-label">Satisfaction Rate</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="avgResponseTime">0.8s</span>
+                            <span class="metric-label">Avg Response Time</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-card ai-recommendations">
+                    <div class="ai-card-header">
+                        <h3><i class="fas fa-star"></i> Smart Recommendations</h3>
+                        <div class="ai-status processing">Learning</div>
+                    </div>
+                    <div class="ai-metrics">
+                        <div class="metric">
+                            <span class="metric-value" id="recommendationAccuracy">87%</span>
+                            <span class="metric-label">Accuracy Rate</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="conversionRate">24%</span>
+                            <span class="metric-label">Conversion Rate</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="roomMatches">342</span>
+                            <span class="metric-label">Successful Matches</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-card ai-predictions">
+                    <div class="ai-card-header">
+                        <h3><i class="fas fa-chart-line"></i> Predictive Analytics</h3>
+                        <div class="ai-status active">Analyzing</div>
+                    </div>
+                    <div class="ai-metrics">
+                        <div class="metric">
+                            <span class="metric-value" id="occupancyPrediction">78%</span>
+                            <span class="metric-label">Next Month Occupancy</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="revenueProjection">+12%</span>
+                            <span class="metric-label">Revenue Growth</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="maintenanceAlerts">3</span>
+                            <span class="metric-label">Maintenance Alerts</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-card ai-performance">
+                    <div class="ai-card-header">
+                        <h3><i class="fas fa-tachometer-alt"></i> System Performance</h3>
+                        <div class="ai-status excellent">Excellent</div>
+                    </div>
+                    <div class="ai-metrics">
+                        <div class="metric">
+                            <span class="metric-value" id="pageLoadTime">1.2s</span>
+                            <span class="metric-label">Avg Load Time</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="errorRate">0.01%</span>
+                            <span class="metric-label">Error Rate</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="uptime">99.9%</span>
+                            <span class="metric-label">Uptime</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Insights Panel -->
+            <div class="ai-insights-panel">
+                <div class="insights-header">
+                    <h3><i class="fas fa-lightbulb"></i> AI Insights & Recommendations</h3>
+                    <button class="refresh-btn" onclick="refreshAIInsights()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div class="insights-content" id="aiInsightsContent">
+                    <div class="insight-item priority-high">
+                        <div class="insight-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="insight-text">
+                            <h4>High Priority</h4>
+                            <p>Room 204's air conditioning shows patterns indicating maintenance needed within 2 weeks</p>
+                        </div>
+                        <div class="insight-action">
+                            <button class="btn btn-sm btn-warning">Schedule Maintenance</button>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item priority-medium">
+                        <div class="insight-icon"><i class="fas fa-chart-bar"></i></div>
+                        <div class="insight-text">
+                            <h4>Revenue Optimization</h4>
+                            <p>Consider increasing rent for premium rooms by 8% based on market analysis and demand</p>
+                        </div>
+                        <div class="insight-action">
+                            <button class="btn btn-sm btn-primary">View Analysis</button>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item priority-low">
+                        <div class="insight-icon"><i class="fas fa-users"></i></div>
+                        <div class="insight-text">
+                            <h4>Customer Experience</h4>
+                            <p>Add more amenities info to chatbot responses - 15% of users ask about facilities</p>
+                        </div>
+                        <div class="insight-action">
+                            <button class="btn btn-sm btn-info">Update Chatbot</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Chat Analytics -->
+            <div class="ai-chat-analytics">
+                <div class="analytics-header">
+                    <h3><i class="fas fa-comments-dollar"></i> Chat Analytics</h3>
+                    <div class="time-filter">
+                        <select id="chatTimeFilter" onchange="updateChatAnalytics()" title="เลือกช่วงเวลาสำหรับวิเคราะห์การแชท">
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="chat-stats-grid">
+                    <div class="chat-stat">
+                        <h4>Top Questions</h4>
+                        <div class="stat-list">
+                            <div class="stat-item">
+                                <span>ห้องว่าง</span>
+                                <span class="stat-count">145</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>ราคา</span>
+                                <span class="stat-count">89</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>สิ่งอำนวยความสะดวก</span>
+                                <span class="stat-count">67</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>ตำแหน่ง</span>
+                                <span class="stat-count">54</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-stat">
+                        <h4>User Satisfaction</h4>
+                        <div class="satisfaction-chart">
+                            <div class="satisfaction-bar">
+                                <div class="bar excellent" style="width: 65%">
+                                    <span>Excellent 65%</span>
+                                </div>
+                            </div>
+                            <div class="satisfaction-bar">
+                                <div class="bar good" style="width: 28%">
+                                    <span>Good 28%</span>
+                                </div>
+                            </div>
+                            <div class="satisfaction-bar">
+                                <div class="bar fair" style="width: 5%">
+                                    <span>Fair 5%</span>
+                                </div>
+                            </div>
+                            <div class="satisfaction-bar">
+                                <div class="bar poor" style="width: 2%">
+                                    <span>Poor 2%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-stat">
+                        <h4>Conversion Funnel</h4>
+                        <div class="funnel-stats">
+                            <div class="funnel-step">
+                                <span>Chat Started</span>
+                                <span class="step-count">1,234</span>
+                            </div>
+                            <div class="funnel-step">
+                                <span>Information Provided</span>
+                                <span class="step-count">892</span>
+                            </div>
+                            <div class="funnel-step">
+                                <span>Showed Interest</span>
+                                <span class="step-count">456</span>
+                            </div>
+                            <div class="funnel-step">
+                                <span>Booked Room</span>
+                                <span class="step-count">123</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals will be added here -->
+    <div id="modalContainer"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>กำลังโหลด...</p>
+        </div>
+    </div>
+
+    <!-- Room Management Modal -->
+    <div id="roomModal" class="modal hidden">
+        <div class="modal-overlay" onclick="closeRoomModal()"></div>
+        <div class="modal-content room-modal">
+            <div class="modal-header">
+                <h3 id="roomModalTitle">เพิ่มห้องใหม่</h3>
+                <button class="modal-close" onclick="closeRoomModal()" title="ปิดหน้าต่าง">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="roomForm" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <!-- Room Image Upload -->
+                        <div class="form-group image-upload-group">
+                            <label>รูปภาพห้อง</label>
+                            <div class="image-upload-container">
+                                <div class="image-preview" id="imagePreview">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-camera"></i>
+                                        <p>คลิกเพื่อเลือกรูปภาพ</p>
+                                        <span class="file-info">JPG, PNG ขนาดไม่เกิน 5MB</span>
+                                    </div>
+                                    <img id="previewImage" class="preview-img hidden" alt="ตัวอย่างรูปภาพ">
+                                </div>
+                                <input type="file" id="roomImage" name="roomImage" accept="image/*" onchange="previewRoomImage(this)">
+                                <div class="image-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('roomImage').click()">
+                                        <i class="fas fa-upload"></i> เลือกรูป
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="removeRoomImage()" id="removeImageBtn" style="display: none;">
+                                        <i class="fas fa-trash"></i> ลบรูป
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Room Details -->
+                        <div class="form-group">
+                            <label for="roomNumber">หมายเลขห้อง *</label>
+                            <input type="text" id="roomNumber" name="roomNumber" placeholder="เช่น 101, A-01" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="roomName">ชื่อห้อง *</label>
+                            <input type="text" id="roomName" name="roomName" placeholder="เช่น ห้องสวยริมน้ำ, ห้องแฟนเซอร์วิส" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="roomType">ประเภทห้อง *</label>
+                            <select id="roomType" name="roomType" required>
+                                <option value="">เลือกประเภทห้อง</option>
+                                <option value="fan">ห้องแฟน</option>
+                                <option value="standard">ห้องสแตนดาร์ด (แอร์)</option>
+                                <option value="deluxe">ห้องดีลักซ์</option>
+                                <option value="studio">ห้องสตูดิโอ</option>
+                                <option value="suite">ห้องสวีท</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="roomPrice">ราคาเช่า (บาท/เดือน) *</label>
+                            <input type="number" id="roomPrice" name="roomPrice" placeholder="3500" min="0" step="100" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="roomSize">ขนาดห้อง (ตร.ม.)</label>
+                            <input type="number" id="roomSize" name="roomSize" placeholder="25" min="0" step="0.5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="roomFloor">ชั้น</label>
+                            <select id="roomFloor" name="roomFloor">
+                                <option value="">เลือกชั้น</option>
+                                <option value="1">ชั้น 1</option>
+                                <option value="2">ชั้น 2</option>
+                                <option value="3">ชั้น 3</option>
+                                <option value="4">ชั้น 4</option>
+                                <option value="5">ชั้น 5</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="roomStatus">สถานะ *</label>
+                            <select id="roomStatus" name="roomStatus" required>
+                                <option value="available">ว่าง</option>
+                                <option value="occupied">มีผู้เช่า</option>
+                                <option value="maintenance">ซ่อมแซม</option>
+                                <option value="reserved">จอง</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="roomDescription">รายละเอียดห้อง</label>
+                            <textarea id="roomDescription" name="roomDescription" rows="3" placeholder="อธิบายรายละเอียดห้อง สิ่งอำนวยความสะดวก ฯลฯ"></textarea>
+                        </div>
+                        
+                        <!-- Amenities -->
+                        <div class="form-group full-width">
+                            <label>สิ่งอำนวยความสะดวก</label>
+                            <div class="amenities-grid">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="amenities" value="wifi">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-wifi"></i> Wi-Fi
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="amenities" value="ac">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-snowflake"></i> เครื่องปรับอากาศ
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="amenities" value="fridge">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-archive"></i> ตู้เย็น
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="amenities" value="tv">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-tv"></i> ทีวี
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="amenities" value="washing">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-tshirt"></i> เครื่องซักผ้า
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="amenities" value="parking">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-car"></i> ที่จอดรถ
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="amenities" value="balcony">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-building"></i> ระเบียง
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="amenities" value="kitchen">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-utensils"></i> ครัวขนาดเล็ก
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeRoomModal()">
+                    <i class="fas fa-times"></i> ยกเลิก
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveRoom()" id="saveRoomBtn">
+                    <i class="fas fa-save"></i> บันทึก
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Gallery Modal -->
+    <div id="imageGalleryModal" class="modal hidden">
+        <div class="modal-overlay" onclick="closeImageGallery()"></div>
+        <div class="modal-content image-gallery-modal">
+            <div class="modal-header">
+                <h3>รูปภาพห้อง</h3>
+                <button class="modal-close" onclick="closeImageGallery()" title="ปิดหน้าต่าง">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="gallery-container">
+                    <img id="galleryImage" src="" alt="รูปภาพห้อง">
+                    <div class="gallery-nav">
+                        <button onclick="previousImage()" class="nav-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button onclick="nextImage()" class="nav-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Immediate Script -->
+    <script>
+        // Modern loading management
+        (function() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+                overlay.classList.add('hidden');
+            }
+            
+            // Add modern features
+            document.documentElement.setAttribute('data-theme', 'modern');
+            
+            // Preload critical resources
+            const preloadImages = ['./logo.svg'];
+            preloadImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        })();
+        
+        // ========== SIMPLE & RELIABLE NAVIGATION SYSTEM ==========
+        function setupSimpleNavigation() {
+            console.log('� Setting up simple navigation system...');
+            
+            // Simple section switching function
+            window.simpleShowSection = function(sectionName) {
+                console.log(`📄 Simple switching to: ${sectionName}`);
+                
+                try {
+                    // Hide all sections
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show target section
+                    const targetSection = document.getElementById(sectionName);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        
+                        // Update page title
+                        const pageTitle = document.getElementById('pageTitle');
+                        if (pageTitle) {
+                            const titles = {
+                                'dashboard': 'แดชบอร์ด',
+                                'rooms': 'จัดการห้องเช่า',
+                                'bookings': 'การจองห้อง',
+                                'issues': 'รายงานปัญหา',
+                                'contacts': 'ข้อความติดต่อ'
+                            };
+                            pageTitle.textContent = titles[sectionName] || sectionName;
+                        }
+                        
+                        console.log(`✅ Simple section ${sectionName} shown successfully`);
+                        return true;
+                    } else {
+                        console.error(`❌ Section ${sectionName} not found`);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error(`❌ Error in simpleShowSection: ${error.message}`);
+                    return false;
+                }
+            };
+            
+            // Setup navigation event listeners
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            console.log(`Found ${navLinks.length} navigation links to setup`);
+            
+            navLinks.forEach((link, index) => {
+                // Remove any existing event listeners by cloning
+                const newLink = link.cloneNode(true);
+                link.parentNode.replaceChild(newLink, link);
+                
+                // Add fresh click event listener
+                newLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const sectionName = this.getAttribute('data-section') || this.getAttribute('href').replace('#', '');
+                    console.log(`🖱️ Simple navigation clicked: ${sectionName}`);
+                    
+                    // Update active state
+                    document.querySelectorAll('.nav-item').forEach(nav => {
+                        nav.classList.remove('active');
+                    });
+                    this.parentElement.classList.add('active');
+                    
+                    // Switch section using simple method
+                    window.simpleShowSection(sectionName);
+                    
+                    // Also try main showSection if available
+                    if (typeof showSection === 'function') {
+                        try {
+                            showSection(sectionName);
+                        } catch (error) {
+                            console.log('Main showSection failed, using simple version');
+                        }
+                    }
+                });
+                
+                console.log(`✅ Simple nav link ${index + 1} setup: ${newLink.getAttribute('data-section')}`);
+            });
+            
+            console.log('✅ Simple navigation system setup completed');
+        }
+        
+        // Initialize simple navigation immediately
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('📄 DOM loaded - initializing simple navigation');
+                setupSimpleNavigation();
+            });
+        } else {
+            console.log('📄 DOM already loaded - initializing simple navigation now');
+            setupSimpleNavigation();
+        }
+        
+        // Additional safety net after main script loads
+        setTimeout(() => {
+            console.log('⏰ Safety check - ensuring navigation works');
+            
+            // Check if main script loaded
+            if (typeof showSection === 'undefined') {
+                console.log('⚠️ Main admin-script.js not loaded, simple navigation only');
+            } else {
+                console.log('✅ Main admin-script.js loaded, dual navigation available');
+            }
+            
+            // Ensure navigation is working
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            if (navLinks.length > 0) {
+                console.log(`🔍 Navigation check: ${navLinks.length} links found`);
+                
+                // Test if click events are working
+                let hasClickEvents = false;
+                navLinks.forEach(link => {
+                    if (link.onclick || link.click) {
+                        hasClickEvents = true;
+                    }
+                });
+                
+                if (!hasClickEvents) {
+                    console.log('🔄 No click events found, re-initializing...');
+                    setupSimpleNavigation();
+                } else {
+                    console.log('✅ Navigation events are active');
+                }
+            }
+        }, 1200);
+        
+        // ========== EMERGENCY FIX FOR defaultRooms ERROR ==========
+        // Add this immediately to prevent errors
+        window.addEventListener('error', function(e) {
+            if (e.message.includes('defaultRooms is not defined')) {
+                console.log('🚨 Emergency fix: defaultRooms error detected');
+                
+                // Define essential mock data
+                window.defaultRooms = [
+                    {
+                        id: 'room_001',
+                        number: '101',
+                        name: 'ห้องแฟนสวยงาม A',
+                        type: 'fan',
+                        price: 3500,
+                        size: 20,
+                        floor: 1,
+                        status: 'available',
+                        description: 'ห้องแฟนขนาด 20 ตร.ม.',
+                        amenities: ['wifi', 'parking'],
+                        image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzRmNmZmZiIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iUHJvbXB0LCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuC4q+C5ieC4reC4hyAxMDE8L3RleHQ+Cjwvc3ZnPgo=',
+                        createdAt: '2024-01-01T00:00:00.000Z',
+                        updatedAt: '2024-01-01T00:00:00.000Z'
+                    },
+                    {
+                        id: 'room_002',
+                        number: '102',
+                        name: 'ห้องแฟนสวยงาม B',
+                        type: 'fan',
+                        price: 3500,
+                        size: 18,
+                        floor: 1,
+                        status: 'occupied',
+                        description: 'ห้องแฟน ขนาดเล็กกะทัดรัด',
+                        amenities: ['wifi', 'parking'],
+                        image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzEwYjk4MSIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iUHJvbXB0LCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuC4q+C5ieC4reC4hyAxMDI8L3RleHQ+Cjwvc3ZnPgo=',
+                        createdAt: '2024-01-01T00:00:00.000Z',
+                        updatedAt: '2024-01-01T00:00:00.000Z'
+                    }
+                ];
+                
+                window.defaultBookings = [];
+                window.defaultIssues = [];
+                window.defaultContacts = [];
+                
+                // Initialize global variables
+                window.rooms = [...window.defaultRooms];
+                window.bookings = [];
+                window.issues = [];
+                window.contacts = [];
+                
+                console.log('✅ Emergency mock data created');
+                e.preventDefault();
+            }
+        });
+        
+        // Pre-define data before script loads
+        if (typeof window.defaultRooms === 'undefined') {
+            console.log('🔧 Pre-defining mock data...');
+            
+            window.defaultRooms = [
+                {
+                    id: 'room_001',
+                    number: '101',
+                    name: 'ห้องแฟนสวยงาม A',
+                    type: 'fan',
+                    price: 3500,
+                    size: 20,
+                    floor: 1,
+                    status: 'available',
+                    description: 'ห้องแฟนขนาด 20 ตร.ม.',
+                    amenities: ['wifi', 'parking'],
+                    image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzRmNmZmZiIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iUHJvbXB0LCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuC4q+C5ieC4reC4hyAxMDE8L3RleHQ+Cjwvc3ZnPgo=',
+                    createdAt: '2024-01-01T00:00:00.000Z',
+                    updatedAt: '2024-01-01T00:00:00.000Z'
+                },
+                {
+                    id: 'room_002',
+                    number: '102',
+                    name: 'ห้องแฟนสวยงาม B',
+                    type: 'fan',
+                    price: 3500,
+                    size: 18,
+                    floor: 1,
+                    status: 'occupied',
+                    description: 'ห้องแฟน ขนาดเล็กกะทัดรัด',
+                    amenities: ['wifi', 'parking'],
+                    image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzEwYjk4MSIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iUHJvbXB0LCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuC4q+C5ieC4reC4hyAxMDI8L3RleHQ+Cjwvc3ZnPgo=',
+                    createdAt: '2024-01-01T00:00:00.000Z',
+                    updatedAt: '2024-01-01T00:00:00.000Z'
+                }
+            ];
+            
+            window.defaultBookings = [];
+            window.defaultIssues = [];
+            window.defaultContacts = [];
+            
+            window.rooms = [...window.defaultRooms];
+            window.bookings = [];
+            window.issues = [];
+            window.contacts = [];
+            
+            console.log('✅ Pre-defined mock data ready');
+        }
+    </script>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

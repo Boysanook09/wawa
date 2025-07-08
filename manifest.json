@@ -1,0 +1,74 @@
+{
+    "name": "Wawa Baansoan Minimar - Modern Living",
+    "short_name": "Wawa Minimar",
+    "description": "ห้องเช่าคุณภาพดี ราคาเป็นกันเอง พร้อมเทคโนโลยีทันสมัย และฟีเจอร์ AI",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#667eea",
+    "theme_color": "#667eea",
+    "orientation": "portrait-primary",
+    "scope": "./",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "./logo.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./logo.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "./logo.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        }
+    ],
+    "categories": ["lifestyle", "business", "productivity", "entertainment"],
+    "lang": "th",
+    "dir": "ltr",
+    "shortcuts": [
+        {
+            "name": "จองห้องพัก",
+            "short_name": "จองห้อง",
+            "description": "จองห้องพักได้ทันที",
+            "url": "./index.html#booking",
+            "icons": [{"src": "./logo.svg", "sizes": "96x96"}]
+        },
+        {
+            "name": "ติดตามสถานะ",
+            "short_name": "ติดตาม",
+            "description": "ติดตามสถานะการจอง",
+            "url": "./index.html#tracking",
+            "icons": [{"src": "./logo.svg", "sizes": "96x96"}]
+        },
+        {
+            "name": "Admin Panel",
+            "short_name": "Admin",
+            "description": "เข้าสู่ระบบจัดการ",
+            "url": "./admin-login.html",
+            "icons": [{"src": "./logo.svg", "sizes": "96x96"}]
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "./logo.svg", 
+            "sizes": "1280x720",
+            "type": "image/svg+xml",
+            "platform": "wide",
+            "label": "Wawa Baansoan Minimar Modern Interface"
+        }
+    ],
+    "related_applications": [],
+    "protocol_handlers": [
+        {
+            "protocol": "web+wawa",
+            "url": "./index.html?action=%s"
+        }
+    ]
+}
